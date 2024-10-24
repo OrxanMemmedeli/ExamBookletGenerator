@@ -1,0 +1,68 @@
+﻿--------------------------  HAZIRLA  --------------------------
+* Health Check kitabxanasi yukle
+
+
+Core
+│
+├── Caching
+│   └── CachingService.cs
+│
+├── DataEncryption
+│   └── EncryptionService.cs    // Daha ümumi ad
+│
+├── Email
+│   ├── EmailSender.cs
+│   └── GmailSender.cs           // Xüsusi Gmail funksiyası üçün ayrıca ad
+│
+├── Generators
+│   ├── ClassCopier.cs           // Adı daha qısa və anlaşılan
+│   ├── UrlGenerator.cs
+│   ├── TemplateGenerator.cs     // Email-specific ad lazım deyil
+│   └── KeyGenerator.cs
+│
+├── Jwt
+│   └── JwtService.cs
+│
+├── Mapping
+│   ├── AutoMapperProfile.cs
+│   └── CustomMapper.cs
+│
+├── Serialization
+│   └── XmlSerializer.cs         // Standart CamelCase
+│
+├── Exceptions
+│   ├── BadRequestException.cs
+│   ├── BaseException.cs
+│   ├── NotFoundException.cs
+│   └── UnhandledException.cs
+│
+├── Filters
+│   ├── WorkFilter.cs
+│   └── FilterAlgorithm.cs       // "Base" redundantdır
+│
+├── Validation
+│   ├── Common
+│   │   └── CompanyCreateValidator.cs  // "DTO" redundantdır
+│   │
+│   ├── CompanyEditValidator.cs
+│   ├── DebtCreateValidator.cs        // PaymentOfDebt qısaldıldı
+│   ├── RoleCreateValidator.cs
+│   ├── RoleEditValidator.cs
+│   ├── UserCreateValidator.cs
+│   └── UserEditValidator.cs
+│
+├── HtmlGeneration
+│   └── HtmlViewGenerator.cs      // Daha məqsədli qovluq adı
+│
+├── Tools
+│   ├── ConnectionStringFinder.cs
+│   └── OrganizationAddressFinder.cs   // Ad daha aydın
+│
+└── ViewModelValidation
+    └── PasswordChangeValidator.cs   // "UserPasswordChange" qısaldıldı
+
+
+
+--------------------------   Belke   --------------------------
+
+--------------------------HAZIRLANMIS--------------------------
