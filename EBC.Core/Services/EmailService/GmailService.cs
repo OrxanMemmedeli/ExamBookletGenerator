@@ -1,11 +1,10 @@
 ﻿using MimeKit;
 using MailKit.Net.Smtp;
-using EBC.Core.Email.Abstract;
 using Microsoft.Extensions.Configuration;
 using EBC.Core.Constants;
 
 
-namespace EBC.Core.Email.Concrete;
+namespace EBC.Core.Services.EmailService;
 
 
 /// <summary>

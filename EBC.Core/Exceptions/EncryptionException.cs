@@ -1,6 +1,5 @@
 ﻿namespace EBC.Core.Exceptions;
 
-public class EncryptionException : Exception
+public class EncryptionException : BaseException
 {
-    public EncryptionException(string message, Exception innerException) : base(message, innerException) { }
 }

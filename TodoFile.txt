@@ -1,6 +1,6 @@
 ﻿--------------------------  HAZIRLA  --------------------------
 * Health Check kitabxanasi yukle
-
+* .Net Core-da olan quyruq mentiqini istifade etmek lazimdir. TechBody sehifesinde var. 
 
 Core
 │

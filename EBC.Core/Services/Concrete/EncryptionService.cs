@@ -1,11 +1,9 @@
-﻿
-
-using EBC.Core.Constants;
+﻿using EBC.Core.Constants;
 using EBC.Core.Exceptions;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EBC.Core.DataEncryption;
+namespace EBC.Core.Services.Concrete;
 
 /// <summary>
 /// EncryptionService sinfi məlumatların şifrələnməsi və deşifrələnməsi üçün istifadə olunur.

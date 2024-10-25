@@ -2,7 +2,7 @@
 
 internal static class GmailDefaultValues
 {
-    public const string FromName = "Exam Booklet Creator";
+    public const string FromName = ApplicationNames.ApplicationName;
     public const string SmtpServer = "smtp.gmail.com";
     public const int SmtpPort = 587;
     public const string FromAddress = "khansoftdevelopment@gmail.com";

@@ -1,4 +1,4 @@
-﻿namespace EBC.Core.Email.Abstract;
+﻿namespace EBC.Core.Services.EmailService;
 
 /// <summary>
 /// IEmailService interfeysi e-poçt göndərmə xidmətini təmin edir.
