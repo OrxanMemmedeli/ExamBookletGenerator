@@ -1,13 +1,13 @@
-﻿using EBC.Core.IEntities.Common;
+﻿using EBC.Core.Entities.Common;
 
-namespace EBC.Core.IEntities.Identity;
+namespace EBC.Core.Entities.Identity;
 
-public interface IUser : IBaseEntity
+public class User : BaseEntity<Guid>
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Password { get; set; }
     public string UserName { get; set; }
 
-    public ICollection<IUserRole> UserRoles { get; set; }
+    public ICollection<UserRole> UserRoles { get; set; }
 }

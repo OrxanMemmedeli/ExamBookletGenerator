@@ -1,8 +1,8 @@
-﻿using EBC.Core.IEntities.Common;
+﻿using EBC.Core.Entities.Common;
 
-namespace EBC.Core.IEntities;
+namespace EBC.Core.Entities;
 
-public interface ISysException : IBaseEntity
+public class SysException : BaseEntity<Guid>
 {
     public string UserIP { get; set; }
     public string UserName { get; set; }

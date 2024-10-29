@@ -1,13 +1,20 @@
 ﻿using EBC.Core.Exceptions;
-using EBC.Core.IEntities.Identity;
+using EBC.Core.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using EBC.Core.Repositories.Abstract;
+using EBC.Core.Services.Concrete;
+using EBC.Core.Constants;
+using EBC.Core.Entities;
 
 namespace EBC.Core.SeedData;
 
 /// <summary>
 /// Verilənlər bazasına ilkin məlumatları (seed data) əlavə edən sinif.
 /// </summary>
+/// <remarks>
+/// Bu sinif, tətbiqin işləməsi üçün lazım olan ilkin məlumatları, məsələn, istifadəçi, rol və təşkilat ünvanlarını verilənlər bazasına əlavə etmək üçün istifadə olunur.
+/// </remarks>
 public class SeedData
 {
     private readonly IOrganizationAdressRepository _organizationAdressRepository;
@@ -18,6 +25,10 @@ public class SeedData
     private readonly DbContext _dbContext;
     private readonly ISysExceptionRepository _sysExceptionRepository;
 
+
+    /// <summary>
+    /// SeedData sinifini yaradır və asılılıqda olan repository-ləri inject edir.
+    /// </summary>
     public SeedData(
         IOrganizationAdressRepository organizationAdressRepository,
         IUserRepository userRepository,
@@ -37,178 +48,187 @@ public class SeedData
     }
 
     /// <summary>
-    /// Verilənlər bazasına ilkin istifadəçi məlumatlarını əlavə edir.
+    /// Verilənlər bazasına ilkin məlumatları əlavə edir.
     /// </summary>
-    private List<IUser> GetUsers()
-    {
-        var adminPass = AncryptionAndDecryption.Encodedata("Aa123!@#");
-        var managerPass = AncryptionAndDecryption.Encodedata("Mm123!!");
-
-        return new List<IUser>
-        {
-            new User
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Status = true,
-                IsDeleted = false,
-                FirstName = "SuperAdmin",
-                LastName = "SuperAdmin",
-                UserName = "admin",
-                Password = adminPass
-            },
-            new User
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Status = true,
-                IsDeleted = false,
-                FirstName = "Manager",
-                LastName = "Manager",
-                UserName = "manager",
-                Password = managerPass
-            }
-        };
-    }
-
-    /// <summary>
-    /// Verilənlər bazasına ilkin rol məlumatlarını əlavə edir.
-    /// </summary>
-    private List<IRole> GetRoles()
-    {
-        return new List<IRole>
-        {
-            new Role
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Status = true,
-                IsDeleted = false,
-                Name = "admin"
-            },
-            new Role
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Status = true,
-                IsDeleted = false,
-                Name = "manager"
-            }
-        };
-    }
-
-    /// <summary>
-    /// Verilənlər bazasındakı mövcud təşkilat ünvanlarını əldə edir.
-    /// </summary>
-    private List<IOrganizationAdress> GetOrganizationAdresses()
-    {
-        return _organizationAdressRepository.GetAll().GetAwaiter().GetResult().Cast<IOrganizationAdress>().ToList();
-    }
-
-    /// <summary>
-    /// İlkin məlumatları bazaya yazır.
-    /// </summary>
+    /// <remarks>
+    /// İlk olaraq, verilənlər bazasında istifadəçi olub-olmadığını yoxlayır. Əgər istifadəçi yoxdursa, default olaraq admin və menecer istifadəçi və rol məlumatlarını əlavə edir.
+    /// Mövcud olduqda isə yalnız təşkilat rollarını yeniləyir.
+    /// </remarks>
     public async Task WriteSeedData()
     {
-        string[] loops = { "admin", "manager" };
-        var roles = _roleRepository.GetAll(x => loops.Contains(x.Name)).GetAwaiter().GetResult();
+        string[] roleNames = { ApplicationCommonField.adminRoleName, ApplicationCommonField.managerRoleName };
 
         if (!_userRepository.EntityAny())
         {
-            List<IUser> users = GetUsers();
+            var users = GetDefaultUsers();
+            var roles = GetDefaultRoles();
+
             _userRepository.AddRangeWithoutSave(users);
-            List<IRole> roles = GetRoles();
             _roleRepository.AddRangeWithoutSave(roles);
 
-            await AddUserRolesAndOrganizationRoles(users, roles, loops);
+            await AddUserAndOrganizationRoles(users, roles, roleNames, includeUserRoles: true);
         }
         else
         {
-            await AddOrganizationRolesOnly(roles, loops);
+            var existingRoles = await _roleRepository.GetAll(x => roleNames.Contains(x.Name));
+            await AddUserAndOrganizationRoles(null, existingRoles, roleNames, includeUserRoles: false);
         }
     }
 
-    private async Task AddUserRolesAndOrganizationRoles(List<IUser> users, List<IRole> roles, string[] loops)
+
+    /// <summary>
+    /// İstifadəçi və təşkilat rollarını əlavə edir.
+    /// </summary>
+    /// <param name="users">Əlavə ediləcək istifadəçilər.</param>
+    /// <param name="roles">Əlavə ediləcək rollar.</param>
+    /// <param name="roleNames">Rol adları.</param>
+    /// <param name="includeUserRoles">Əgər true dəyəri verilsə, istifadəçi rolları da əlavə olunur.</param>
+    /// <remarks>
+    /// Bu metod həm istifadəçilərə, həm də təşkilat ünvanlarına uyğun rolları təyin edir və əlavə edir. 
+    /// Verilənlərin hamısı bir transaksiyada yerinə yetirilir və hər hansı bir xətada bütün əməliyyatlar geri çevrilir.
+    /// </remarks>
+    private async Task AddUserAndOrganizationRoles(List<User>? users, List<Role> roles, string[] roleNames, bool includeUserRoles)
     {
         var organizations = GetOrganizationAdresses();
-        using var transaction = _dbContext.Database.BeginTransaction();
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
         try
         {
-            var userRoles = new List<IUserRole>();
-            var organizationRoles = new List<IOrganizationAdressRole>();
+            var userRoles = new List<UserRole>();
+            var organizationRoles = new List<OrganizationAdressRole>();
 
-            foreach (var loop in loops)
+            foreach (var roleName in roleNames)
             {
-                var user = users.FirstOrDefault(u => u.UserName.Equals(loop, StringComparison.OrdinalIgnoreCase));
-                var role = roles.FirstOrDefault(r => r.Name.Equals(loop, StringComparison.OrdinalIgnoreCase));
-
-                if (user != null && role != null)
-                {
-                    userRoles.Add(new UserRole { UserId = user.Id, RoleId = role.Id });
-                    var relatedOrgs = loop == "admin" ? organizations : organizations.Where(o => !o.RequestAdress.Contains("Delete", StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    organizationRoles.AddRange(relatedOrgs.Select(o => new OrganizationAdressRole { RoleId = role.Id, OrganizationAdressId = o.Id }));
-                }
-            }
-
-            _userRoleRepository.AddRangeWithoutSave(userRoles);
-            _organizationAdressRoleRepository.AddRangeWithoutSave(organizationRoles);
-
-            transaction.Commit();
-            _dbContext.SaveChanges();
-        }
-        catch (Exception ex)
-        {
-            transaction.Rollback();
-            await WriteError(ex, "SeedData");
-            throw;
-        }
-    }
-
-    private async Task AddOrganizationRolesOnly(List<IRole> roles, string[] loops)
-    {
-        var organizations = GetOrganizationAdresses();
-        var oldOrganizationRoles = _organizationAdressRoleRepository.GetAll().GetAwaiter().GetResult();
-        var newOrganizationRoles = new List<IOrganizationAdressRole>();
-
-        try
-        {
-            foreach (var loop in loops)
-            {
-                var role = roles.FirstOrDefault(r => r.Name.Equals(loop, StringComparison.OrdinalIgnoreCase));
+                var role = roles.FirstOrDefault(r => r.Name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
                 if (role == null) continue;
 
-                var existingIds = oldOrganizationRoles.Select(o => o.OrganizationAdressId);
-                var relatedOrgs = loop == "admin" ? organizations.Where(o => !existingIds.Contains(o.Id)).ToList() : organizations.Where(o => !o.RequestAdress.Contains("Delete") && !existingIds.Contains(o.Id)).ToList();
+                if (includeUserRoles && users != null)
+                {
+                    var user = users.FirstOrDefault(u => u.UserName.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+                    if (user != null)
+                        userRoles.Add(new UserRole { UserId = user.Id, RoleId = role.Id });
+                }
 
-                newOrganizationRoles.AddRange(relatedOrgs.Select(o => new OrganizationAdressRole { RoleId = role.Id, OrganizationAdressId = o.Id }));
+                var relevantOrgs = roleName == ApplicationCommonField.adminRoleName
+                    ? organizations
+                    : organizations.Where(o => !o.RequestAdress.Contains(ApplicationCommonField.delete, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                organizationRoles.AddRange(relevantOrgs.Select(o => new OrganizationAdressRole
+                {
+                    RoleId = role.Id,
+                    OrganizationAdressId = o.Id
+                }));
             }
 
-            _organizationAdressRoleRepository.AddRange(newOrganizationRoles);
+            if (includeUserRoles) _userRoleRepository.AddRangeWithoutSave(userRoles);
+            _organizationAdressRoleRepository.AddRangeWithoutSave(organizationRoles);
+
+            await transaction.CommitAsync();
+            await _dbContext.SaveChangesAsync();
         }
         catch (Exception ex)
         {
-            await WriteError(ex, "SeedData");
-            throw;
+            await transaction.RollbackAsync();
+            await LogError(ex, ApplicationCommonField.seedData);
         }
     }
 
-    private async Task WriteError(Exception ex, string path)
+    /// <summary>
+    /// Varsayılan istifadəçiləri gətirir.
+    /// </summary>
+    /// <returns>İstifadəçilərin siyahısını döndərir.</returns>
+    /// <remarks>
+    /// Bu metod default admin və menecer istifadəçi hesablarını gətirir və hər bir hesab üçün unikal ID və şifrə təyin edir.
+    /// </remarks>
+    private List<User> GetDefaultUsers()
     {
-        var entity = new SysException
+        return new List<User>
+        {
+            new User
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Status = true,
+                IsDeleted = false,
+                FirstName = ApplicationCommonField.adminFirstName,
+                LastName = ApplicationCommonField.adminLastName,
+                UserName = ApplicationCommonField.adminUserName,
+                Password = EncryptionService.Encrypt(ApplicationCommonField.adminPass)
+            },
+            new User
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Status = true,
+                IsDeleted = false,
+                FirstName = ApplicationCommonField.managerFirstName,
+                LastName = ApplicationCommonField.managerLastName,
+                UserName = ApplicationCommonField.managerUserName,
+                Password = EncryptionService.Encrypt(ApplicationCommonField.managerPass)
+            }
+        };
+    }
+
+    /// <summary>
+    /// Varsayılan rolları gətirir.
+    /// </summary>
+    /// <returns>Rolların siyahısını döndərir.</returns>
+    /// <remarks>
+    /// Default olaraq tətbiqdə admin və menecer rollarını döndərir.
+    /// </remarks>
+    private List<Role> GetDefaultRoles()
+    {
+        return new List<Role>
+        {
+            new Role
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Status = true,
+                IsDeleted = false,
+                Name = ApplicationCommonField.adminRoleName
+            },
+            new Role
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Status = true,
+                IsDeleted = false,
+                Name = ApplicationCommonField.managerRoleName
+            }
+        };
+    }
+
+    /// <summary>
+    /// Təşkilat ünvanlarını gətirir.
+    /// </summary>
+    /// <returns>Təşkilat ünvanlarının siyahısını döndərir.</returns>
+    private List<OrganizationAdress> GetOrganizationAdresses()
+        => _organizationAdressRepository.GetAll().GetAwaiter().GetResult().ToList();
+
+    /// <summary>
+    /// Xətanı qeyd edir.
+    /// </summary>
+    /// <param name="ex">Xəta məlumatı.</param>
+    /// <param name="source">Xətanın baş verdiyi yerin adı.</param>
+    /// <remarks>
+    /// Bu metod yaranan xətaları verilənlər bazasına qeyd edir və əlavə məlumatlar verir.
+    /// </remarks>
+    private async Task LogError(Exception ex, string source)
+    {
+        var sysException = new SysException
         {
             Id = Guid.NewGuid(),
             Exception = ex.ToString(),
             Message = ex.Message,
-            RequestPath = path,
+            RequestPath = source,
             StackTrace = ex.StackTrace,
-            UserName = "System",
-            UserIP = "system",
+            UserName = ApplicationCommonField.system,
+            UserIP = ApplicationCommonField.systemIP,
             StatusCode = ex switch
             {
                 NotFoundException => StatusCodes.Status404NotFound,
@@ -218,6 +238,6 @@ public class SeedData
             }
         };
 
-        await _sysExceptionRepository.AddAsync(entity);
+        await _sysExceptionRepository.AddAsync(sysException);
     }
 }

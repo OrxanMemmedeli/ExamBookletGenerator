@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EBC.Core.IEntities.Common;
+namespace EBC.Core.Entities.Common;
 
-public interface IBaseEntity
+public abstract class BaseEntity<T> : Entity<T>
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
     public bool Status { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime CreatedDate { get; set; }

@@ -8,7 +8,7 @@ namespace EBC.Core.Services.Concrete;
 /// <summary>
 /// Təsdiqləmə URL-ləri yaratmaq və yoxlamaq üçün istifadə edilən xidmət.
 /// </summary>
-public class ConfirmUrlService : IUrlService
+public class UrlService : IUrlService
 {
     private readonly IUrlHelperFactory _urlHelperFactory;
     private readonly HttpContext _httpContext;
@@ -16,11 +16,11 @@ public class ConfirmUrlService : IUrlService
 
 
     /// <summary>
-    /// ConfirmUrlService konstruktoru.
+    /// UrlService konstruktoru.
     /// </summary>
     /// <param name="urlHelperFactory">URL yaratmaq üçün tələb olunan URL helper fabriki.</param>
     /// <param name="httpContextAccessor">Cari HTTP kontekstini əldə etmək üçün tələb olunan HttpContextAccessor.</param>
-    public ConfirmUrlService(IUrlHelperFactory urlHelperFactory, IHttpContextAccessor httpContextAccessor)
+    public UrlService(IUrlHelperFactory urlHelperFactory, IHttpContextAccessor httpContextAccessor)
     {
         _urlHelperFactory = urlHelperFactory;
         _httpContext = httpContextAccessor.HttpContext;

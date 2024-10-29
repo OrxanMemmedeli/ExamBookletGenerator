@@ -1,5 +1,5 @@
 ﻿using EBC.Core.Constants;
-using EBC.Core.Enums;
+using EBC.Core.Models.Enums;
 using System.Text;
 
 namespace EBC.Core.Helpers.Generator.EmailTemplate;
