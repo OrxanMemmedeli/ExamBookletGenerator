@@ -54,7 +54,7 @@ public class SeedData
     /// İlk olaraq, verilənlər bazasında istifadəçi olub-olmadığını yoxlayır. Əgər istifadəçi yoxdursa, default olaraq admin və menecer istifadəçi və rol məlumatlarını əlavə edir.
     /// Mövcud olduqda isə yalnız təşkilat rollarını yeniləyir.
     /// </remarks>
-    public async Task WriteSeedData()
+    public async Task WriteSeedDataAsync()
     {
         string[] roleNames = { ApplicationCommonField.adminRoleName, ApplicationCommonField.managerRoleName };
 
