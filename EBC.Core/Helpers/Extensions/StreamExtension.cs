@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace EBC.Core.Helpers.Extensions;
 

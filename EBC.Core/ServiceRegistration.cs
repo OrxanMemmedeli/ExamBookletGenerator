@@ -1,20 +1,21 @@
 ﻿using AccountManagerSystem.Repositories.Abstract;
 using EBC.Core.Caching.Abstract;
 using EBC.Core.Caching.Concrete;
+using EBC.Core.Helpers.StartupFinders;
 using EBC.Core.Middlewares;
 using EBC.Core.Models;
 using EBC.Core.Repositories.Abstract;
 using EBC.Core.Repositories.Concrete;
-using EBC.Core.SeedData;
 using EBC.Core.Services.Abstract;
 using EBC.Core.Services.Concrete;
 using EBC.Core.Services.EmailService;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using StackExchange.Profiling;
 using System.Reflection;
+using WatchDog;
+using WatchDog.src.Enums;
 
 namespace EBC.Core;
 
@@ -36,8 +37,24 @@ public static class ServiceRegistration
         //Middlewares
         AddMiddlewares(services, isDevelopment);
 
+        // Health Checks
+        RegisterHealthChecks(services, configuration);
+
+        // MiniProfiler
+        RegisterMiniProfiler(services);
+
+        // WatchDog
+        services.AddWatchDogServices(options =>
+        {
+            options.IsAutoClear = true;
+            options.ClearTimeSchedule = WatchDog.src.Enums.WatchDogAutoClearScheduleEnum.Monthly;
+            options.DbDriverOption = WatchDogDbDriverEnum.MSSQL;
+            options.SetExternalDbConnString = ConnectionStringFinder.GetConnectionString(configuration);
+        });
+
         //SeedData
         services.AddScoped<EBC.Core.SeedData.SeedData>();
+
 
 
         return services;
@@ -117,5 +134,27 @@ public static class ServiceRegistration
             var cachingService = provider.GetRequiredService<ICachingService<IMemoryCache>>();
             return new GlobalErrorHandlingMiddleware(serviceProvider, cachingService, isDevelopment);
         });
+    }
+
+
+    private static void RegisterHealthChecks(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHealthChecks()
+            .AddSqlServer(ConnectionStringFinder.GetConnectionString(configuration), name: "SQL Database", tags: new[] { "db", "sql" });
+
+        services.AddHealthChecksUI(setup =>
+        {
+            setup.AddHealthCheckEndpoint("Health Checks", "/health");
+        }).AddInMemoryStorage();
+    }
+
+    private static void RegisterMiniProfiler(IServiceCollection services)
+    {
+        services.AddMiniProfiler(options =>
+        {
+            options.RouteBasePath = "/profiler";
+            options.ColorScheme = ColorScheme.Dark;
+            options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+        }).AddEntityFramework();
     }
 }

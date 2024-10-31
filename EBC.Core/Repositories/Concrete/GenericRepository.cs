@@ -2,8 +2,10 @@
 using System.Linq.Expressions;
 using System.Threading;
 using AccountManagerSystem.Repositories.Abstract;
+using EBC.Core.Caching.Concrete;
 using EBC.Core.Entities.Common;
 using EBC.Core.Repositories.Abstract;
+using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
 
 namespace EBC.Core.Repositories.Concrete;
@@ -313,7 +315,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
         return noTracking ? query.AsNoTracking() : query;
     }
 
-
     /* Istifade nümunəsi
      
     var filteredEntities = genericRepository.GetAllQueryable(
@@ -324,6 +325,33 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
     );
      
      */
+  
+    public virtual IEnumerable<TEntity> GetAllCompiled(bool noTracking = true)
+    {
+        // Cache üçün açar yaradılır
+        var key = $"GetAllCompiled-{nameof(TEntity)}-{noTracking}";
+
+        // Expression yaradılır
+        Expression<Func<DbContext, IQueryable<TEntity>>> queryExpression = dbContext =>
+            GetAllQueryable(noTracking);
+
+        return CompiledQueryCache<TEntity>.GetOrAddCompiledQuery(key, queryExpression)(_context);
+    }
+
+    public virtual IEnumerable<TEntity> GetAllCompiled(Expression<Func<TEntity, bool>> predicate, bool noTracking = true, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, params Expression<Func<TEntity, object>>[] includes)
+    {
+        // Cache üçün açar yaradılır
+        var key = $"GetAllCompiled-{nameof(TEntity)}-{predicate}-{noTracking}-{orderBy?.ToString() ?? string.Empty}-{string.Join(",", includes.Select(x => x.ToString()))}";
+
+        // Expression yaradılır
+        Expression<Func<DbContext, IQueryable<TEntity>>> queryExpression = dbContext =>
+            GetAllQueryable(predicate, noTracking, orderBy, includes);
+
+        // Kompilyasiya olunmuş sorğunu qaytarır
+        return CompiledQueryCache<TEntity>.GetOrAddCompiledQuery(key, queryExpression)(_context);
+    }
+
+
 
     #endregion
 
@@ -343,7 +371,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
             : await entity.ToListAsync();
     }
 
-
+ 
     /// <summary>
     /// Filtr və digər parametrlərə əsasən entity kolleksiyasını alır və siyahı şəklində döndürür.
     /// </summary>
