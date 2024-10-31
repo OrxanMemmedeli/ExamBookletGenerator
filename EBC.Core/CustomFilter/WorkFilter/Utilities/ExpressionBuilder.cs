@@ -229,7 +229,8 @@ public class ExpressionBuilder
 
     private Expression GetBetweenExpression(MemberExpression property, object value1, object value2)
     {
-        if (value1 == null || value2 == null) throw new ArgumentException("Between values cannot be null.");
+        ArgumentNullException.ThrowIfNull(value1);
+        ArgumentNullException.ThrowIfNull(value2);
 
         var greaterThanOrEqual = Expression.GreaterThanOrEqual(property, Expression.Constant(value1));
         var lessThanOrEqual = Expression.LessThanOrEqual(property, Expression.Constant(value2));

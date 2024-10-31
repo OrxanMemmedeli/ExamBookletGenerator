@@ -1,0 +1,30 @@
+﻿@model EBC.Core.Models.ToolsButtonViewModel
+
+@if (Model.Editable)
+{
+    <a asp-area="@Model.Area" asp-controller="@Model.Controller" asp-action="Edit" asp-route-id="@Model.RouteId" title="Düzəliş et">
+        <lord-icon src="https://cdn.lordicon.com/bxxnzvfm.json"
+                   trigger="hover"
+                   style="width:33px;height:33px">
+        </lord-icon>
+    </a>
+}
+@if (Model.Deletable)
+{
+    <a asp-area="@Model.Area" asp-controller="@Model.Controller" asp-action="Delete" asp-route-id="@Model.RouteId" title="Sil" onclick="return confirm('Seçdiyiniz sətr silinmiş statusuna keçiriləcəkdir. \n\n\nStatusa dəyişikliyi edilsinmi?')">
+        <lord-icon src="https://cdn.lordicon.com/qjwkduhc.json"
+                   trigger="hover"
+                   style="width:33px;height:33px">
+        </lord-icon>
+    </a>
+}
+
+@if (Model.Removable)
+{
+    <a asp-area="@Model.Area" asp-controller="@Model.Controller" asp-action="Remove" asp-route-id="@Model.RouteId" title="Birdəfəlik Sil" onclick="return confirm('Silinən məlumatların geri qaytarılması mümkün deyil. \n\n\nSətiri yənədə silmək istəyirsinizmi?')">
+        <lord-icon src="https://cdn.lordicon.com/inrunzby.json"
+                   trigger="hover"
+                   style="width:33px;height:33px">
+        </lord-icon>
+    </a>
+}

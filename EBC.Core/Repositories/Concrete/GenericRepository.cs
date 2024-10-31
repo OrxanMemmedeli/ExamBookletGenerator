@@ -28,14 +28,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
 
     public virtual int Add(TEntity entity)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         this.entity.Add(entity);
         return SaveChanges();
     }
 
     public virtual async Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         await this.entity.AddAsync(entity, cancellationToken);
         return await SaveChangesAsync(cancellationToken);
     }
@@ -60,7 +60,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
 
     public virtual void AddWithoutSave(TEntity entity)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         this.entity.Add(entity);
     }
 
@@ -87,21 +87,21 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
 
     public virtual int Update(TEntity entity)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         this.entity.Update(entity);
         return SaveChanges();
     }
 
     public virtual async Task<int> UpdateAsync(TEntity entity)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         _context.Entry(entity).State = EntityState.Modified;
         return await SaveChangesAsync();
     }
 
     public virtual void UpdateWithoutSave(TEntity entity)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         _context.Entry(entity).State = EntityState.Modified;
     }
 
@@ -120,7 +120,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
 
     public virtual int Delete(TEntity entity)
     {
-        if (entity == null) throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         if (_context.Entry(entity).State == EntityState.Detached)
             this.entity.Attach(entity);
 
@@ -137,7 +137,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
 
     public virtual async Task<int> DeleteAsync(TEntity entity)
     {
-        if (entity == null) throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
+
         if (_context.Entry(entity).State == EntityState.Detached)
             this.entity.Attach(entity);
 
@@ -201,14 +202,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
 
     public virtual int SoftDelete(TEntity entity)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
 
         return SoftDeleteEntity(entity);
     }
 
     public virtual async Task<int> SoftDeleteAsync(TEntity entity)
     {
-        entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
 
         return await SoftDeleteEntityAsync(entity);
     }
@@ -259,7 +260,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
 
     private async Task<int> AddOrUpdateInternal(TEntity entity, bool isAsync = true)
     {
-        if (entity == null) throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
 
         if (entity is not Entity<Guid> baseEntity)
             throw new InvalidOperationException($"AddOrUpdate is only supported for entities implementing Entity<Guid>.");

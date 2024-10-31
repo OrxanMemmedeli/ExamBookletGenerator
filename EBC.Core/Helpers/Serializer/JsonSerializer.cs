@@ -61,8 +61,7 @@ public static class JsonSerializer
     /// <returns>T tipinə uyğun obyekt və ya null (əgər deserializasiya uğursuz olarsa).</returns>
     public static T? DeserializeXML<T>(this string xmlContent) where T : class
     {
-        if (string.IsNullOrWhiteSpace(xmlContent))
-            throw new ArgumentNullException(nameof(xmlContent), "XML məzmun boş ola bilməz.");
+        ArgumentNullException.ThrowIfNullOrEmpty(xmlContent);
 
         var serializer = new XmlSerializer(typeof(T));
         using var stringReader = new StringReader(xmlContent);
@@ -78,8 +77,7 @@ public static class JsonSerializer
     /// <returns>XML formatında obyektin string ifadəsi və ya null (əgər obyekt null-dursa).</returns>
     public static string? SerializeXML<T>(this T objectToSerialize)
     {
-        if (objectToSerialize == null)
-            throw new ArgumentNullException(nameof(objectToSerialize), "Serialize ediləcək obyekt null ola bilməz.");
+        ArgumentNullException.ThrowIfNull(objectToSerialize);
 
         var xmlSerializer = new XmlSerializer(typeof(T));
         using var stringWriter = new StringWriter();

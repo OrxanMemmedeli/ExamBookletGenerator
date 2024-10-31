@@ -75,8 +75,7 @@ public static class EnumExtensions
     /// <returns>Uyğun gələn Enum dəyəri.</returns>
     public static TEnum GetEnumValueByDisplayName<TEnum>(this string value) where TEnum : struct
     {
-        if (string.IsNullOrEmpty(value))
-            throw new ArgumentNullException(nameof(value));
+        ArgumentNullException.ThrowIfNullOrEmpty(value);
 
         var type = typeof(TEnum);
         if (!type.IsEnum) throw new InvalidOperationException($"{type} Enum növü olmalıdır.");
@@ -106,7 +105,7 @@ public static class EnumExtensions
     /// <returns>Əgər dəyər massivdə varsa, true; əks halda false qaytarır.</returns>
     public static bool IsIn<T>(this T value, params T[] source)
     {
-        if (source == null) throw new ArgumentNullException(nameof(source));
+        ArgumentNullException.ThrowIfNull(source);
         return source.Contains(value);
     }
 
@@ -131,11 +130,8 @@ public static class EnumExtensions
     /// <returns>Resurs dəyəri və ya açar adı.</returns>
     private static string LookupResource(IReflect resourceManagerProvider, string resourceKey)
     {
-        if (resourceManagerProvider == null) // Null yoxlaması əlavə edildi
-            throw new ArgumentNullException(nameof(resourceManagerProvider));
-
-        if (string.IsNullOrEmpty(resourceKey)) // Null və ya boş sətir yoxlaması əlavə edildi
-            throw new ArgumentNullException(nameof(resourceKey));
+        ArgumentNullException.ThrowIfNull(resourceManagerProvider);
+        ArgumentNullException.ThrowIfNullOrEmpty(resourceKey);
 
         var property = resourceManagerProvider
             .GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)

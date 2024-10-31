@@ -28,7 +28,7 @@ public static class CompiledQueryCache<TEntity> where TEntity : class
     /// <exception cref="ArgumentNullException">Sorğu ifadəsi null olduqda atılır.</exception>
     public static Func<DbContext, IEnumerable<TEntity>> GetOrAddCompiledQuery(string queryKey, Expression<Func<DbContext, IQueryable<TEntity>>> queryExpr)
     {
-        if (queryExpr == null) throw new ArgumentNullException(nameof(queryExpr));
+        ArgumentNullException.ThrowIfNullOrEmpty(queryKey);
 
         if (!Queries.ContainsKey(queryKey)) // Sorğu daha əvvəl kompilyasiya edilməyibsə, onu kompilyasiya edir və cache-ə əlavə edir
             Queries.Add(queryKey, EF.CompileQuery(queryExpr)); 
@@ -47,7 +47,7 @@ public static class CompiledQueryCache<TEntity> where TEntity : class
     /// <exception cref="ArgumentNullException">Sorğu ifadəsi null olduqda atılır.</exception>
     public static Func<DbContext, IEnumerable<TEntity>> GetOrAddCompiledQuery(string queryKey, Expression<Func<DbContext, IEnumerable<TEntity>>> queryExpr)
     {
-        if (queryExpr == null) throw new ArgumentNullException(nameof(queryExpr));
+        ArgumentNullException.ThrowIfNullOrEmpty(queryKey);
 
         if (!Queries.ContainsKey(queryKey)) // Sorğu daha əvvəl kompilyasiya edilməyibsə, onu kompilyasiya edir və cache-ə əlavə edir
             Queries.Add(queryKey, EF.CompileQuery(queryExpr));

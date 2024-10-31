@@ -1,5 +1,6 @@
 ﻿using EBC.Core.CustomFilter.WorkFilter.Filters;
 using EBC.Core.CustomFilter.WorkFilter.Utilities;
+using LiteDB;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -15,7 +16,7 @@ public static class BaseFilterAlgorithm<TEntity> where TEntity : class
     /// <returns>Uyğunlaşdırılmış filtr ifadəsi və ya null</returns>
     public static Expression<Func<TEntity, bool>> GenerateFilterExpression<TFilter>(TFilter filterModel)
     {
-        if (filterModel == null) throw new ArgumentNullException(nameof(filterModel));
+        ArgumentNullException.ThrowIfNull(filterModel);
 
         var parameter = Expression.Parameter(typeof(TEntity), "entity");
         Expression? filterExpression = null;
