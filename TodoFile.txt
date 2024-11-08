@@ -1,12 +1,11 @@
 ﻿--------------------------  HAZIRLA  --------------------------
-* Health Check kitabxanasi yukle (imkan olsa Core hisseye)
-* Loglama ucun alet istifadesi
 * .Net Core-da olan quyruq mentiqini istifade etmek lazimdir. TechBody sehifesinde var. 
-* Hangifire istifade et ve onun ucun merkezlesdirilmis generik method yaz (Core hisseye)
+
 * Validation yaz esas entityler ucun (Core hisseye)
-* Rate Limit hisseside elave etmek olar Core hisseye
-* Butun Root deyerlerini tapan methoduda yaz
-* View Generator hissesi yazmaq 
+
+* singnalR
+* Authentication Elave et
+
 
 
 APP
@@ -33,19 +32,23 @@ Core
 │   ├── UserCreateValidator.cs
 │   └── UserEditValidator.cs
 │
-├── HtmlGeneration
-│   └── HtmlViewGenerator.cs      // Daha məqsədli qovluq adı
-│
 └── ViewModelValidation
     └── PasswordChangeValidator.cs   // "UserPasswordChange" qısaldıldı
 
 
 
 --------------------------   Belke   --------------------------
-* Core hissesi ucun ele bir sey yazmaq lazimdir ki, basqqa proyektde Engindeki kimi cagirmaq olsun
+* Core hissesi ucun ele bir sey yazmaq lazimdir ki, basqqa proyektde Engindeki kimi cagirmaq olsun (Elemek vacibdir)
+* Loglama ucun alet istifadesi (Oneeeeelsab etmirem)
 
 --------------------------HAZIRLANMIS--------------------------
 * alinsa Core hisseye configuration yaz
 * Repositry ucun global yaz hamisini alsin avtomatik. Amma unutma ki Core ve App seviyyesi olacaq
+    * Butun Root deyerlerini tapan methoduda yaz
 * alinsa Core hisseye Global Error Handling elave et Middleware olaraq. 
 * Base Responce model qur (alinsa Core hisseye)
+* View Generator hissesi yazmaq 
+* Health Check kitabxanasi yukle (imkan olsa Core hisseye)
+* Hangifire istifade et ve onun ucun merkezlesdirilmis generik method yaz (Core hisseye)
+* Rate Limit hisseside elave etmek olar Core hisseye
+* Core hissede olan aletlerden istifadenin ve ya legv edilmenin teyini

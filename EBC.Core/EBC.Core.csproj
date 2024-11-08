@@ -14,6 +14,10 @@
 		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="8.0.2" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="8.0.1" />
+		<PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
+		<PackageReference Include="Hangfire" Version="1.8.15" />
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.15" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.15" />
 		<PackageReference Include="MailKit" Version="4.8.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
@@ -28,6 +32,10 @@
 		<PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.8" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
 		<PackageReference Include="WatchDog.NET" Version="1.4.11" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Jobs\Hangfire\" />
 	</ItemGroup>
 
 </Project>

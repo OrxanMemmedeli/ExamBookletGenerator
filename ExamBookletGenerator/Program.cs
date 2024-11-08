@@ -1,6 +1,16 @@
 using EBC.Core;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
+
+ServiceOptions.Configure(
+    useRateLimiting: true,
+    useHangfire: true,
+    useWatchDog: true,
+    useHealthChecks: true,
+    useMiniProfiler: true,
+    useBackgroundService: true
+);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -32,6 +42,9 @@ app.UseAuthorization();
 
 //Layers App
 app.UseCoreLayerCustomApplication();
+
+//Hangfire
+app.MapHangfireDashboard(); ///hangfire
 
 app.MapControllerRoute(
     name: "default",

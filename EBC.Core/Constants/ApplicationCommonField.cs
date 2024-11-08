@@ -3,6 +3,7 @@
 public static class ApplicationCommonField
 {
     public const string ApplicationName = "Exam Booklet Creator";
+    public const string QueueCapacity = "QueueCapacity";
 
     public const string adminPass = "Aa123!@#";
     public const string adminFirstName = "SuperAdmin";

@@ -1,5 +1,7 @@
-﻿using EBC.Core.Helpers.StartupFinders;
+﻿using AspNetCoreRateLimit;
+using EBC.Core.Helpers.StartupFinders;
 using EBC.Core.Middlewares;
+using Hangfire;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -20,20 +22,61 @@ public static class ApplicationBuilderExtensions
     {
         app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
-        app.UseMiniProfiler();
-
         // MiniProfiler Middleware aktiv edilməsi
         app.UseMiniProfiler();
 
-        // Health Checks endpointi
-        app.UseHealthChecks("/health", new HealthCheckOptions
-        {
-            Predicate = _ => true,
-            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        });
+        // Health Checks
+        UseHealthChecks(app);
 
-        // Health Checks UI
-        app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
+        // WatchDog
+        UseWatchDog(app);
+
+        //Hangfire
+        UseHangfire(app);
+
+        //RateLimit
+        UseRateLimit(app);
+
+        //OrganizationAddressFinder sinifini işə salır və URL-ləri bazaya əlavə edir.
+        await OrganizationAddressFinder.GenerateAsync(app);
+
+        return app;
+    }
+
+
+
+
+    #region Common
+    public static async Task AddSeedDataAsync(this IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var seedData = scope.ServiceProvider.GetRequiredService<EBC.Core.SeedData.SeedData>();
+        await seedData.WriteSeedDataAsync();
+    }
+    #endregion
+
+    #region Optional
+
+    private static void UseRateLimit(IApplicationBuilder app)
+    {
+        if (!ServiceOptions.UseRateLimiting)
+            return;
+
+        app.UseIpRateLimiting();
+    }
+
+    private static void UseHangfire(IApplicationBuilder app)
+    {
+        if (!ServiceOptions.UseHangfire)
+            return;
+
+        app.UseHangfireDashboard();
+    }
+
+    private static void UseWatchDog(IApplicationBuilder app)
+    {
+        if (!ServiceOptions.UseWatchDog)
+            return;
 
         // WatchDog Middleware aktiv edilməsi
         app.UseWatchDogExceptionLogger();
@@ -48,18 +91,22 @@ public static class ApplicationBuilderExtensions
             config.UseOutputCache = true;
             config.UseRegexForBlacklisting = true;
         });
-
-
-        //OrganizationAddressFinder sinifini işə salır və URL-ləri bazaya əlavə edir.
-        await OrganizationAddressFinder.GenerateAsync(app);
-
-        return app;
     }
 
-    public static async Task AddSeedDataAsync(this IServiceProvider serviceProvider)
+    private static void UseHealthChecks(IApplicationBuilder app)
     {
-        using var scope = serviceProvider.CreateScope();
-        var seedData = scope.ServiceProvider.GetRequiredService<EBC.Core.SeedData.SeedData>();
-        await seedData.WriteSeedDataAsync();
+        if (!ServiceOptions.UseHealthChecks)
+            return;
+
+        // Health Checks endpointi
+        app.UseHealthChecks("/health", new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+
+        // Health Checks UI
+        app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
     }
+    #endregion
 }
