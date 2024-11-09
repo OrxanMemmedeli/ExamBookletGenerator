@@ -13,6 +13,10 @@ using EBC.Core.Services.BackgroundServices;
 using EBC.Core.Services.Concrete;
 using EBC.Core.Services.EmailService;
 using Hangfire;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,6 +79,9 @@ public static class ServiceRegistration
     #region Common
     private static void AddCoreServiceRouteServices(IServiceCollection services, IConfiguration configuration)
     {
+        //json fayl üzərindən bir basa class modelinə cast edilməsi üçün.
+        services.AddOptions();
+
         services.AddMemoryCache();
 
         //Core.Services
@@ -136,6 +143,7 @@ public static class ServiceRegistration
                 services.AddScoped(repositoryInterfaceType, repositoryType);
         }
     }
+   
     private static void AddMiddlewares(IServiceCollection services, bool isDevelopment)
     {
         // Middleware qeydiyyatı
@@ -243,6 +251,53 @@ public static class ServiceRegistration
 
         services.AddSingleton<IBackgroundTaskQueue<string>>(provider => new BackgroundTaskQueue<string>(configuration));
         services.AddHostedService<QueueHostedService>();
+    }
+
+    /// <summary>
+    /// Authentication və Authorization xidmətlərini layihəyə əlavə edir.
+    /// Cookie-based autentifikasiya və xüsusi rollara əsaslanan icazələr üçün konfiqurasiya edilə bilər.
+    /// </summary>
+    /// <param name="services">Servis kolleksiyası.</param>
+    /// <param name="configuration">Konfiqurasiya məlumatlarını ehtiva edən IConfiguration obyekti.</param>
+    public static void AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Cookie Autentifikasiyası
+        // Bu bölmə, istifadəçinin sessiyasını idarə etmək və autentifikasiya cookie-lərini təyin etmək üçün nəzərdə tutulub.
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+        {
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(90); // Cookie-nin müddəti bitmə vaxtı (90 dəqiqə).
+            options.LoginPath = "/Account/Login"; // İstifadəçi doğrulama tələb olunan yerə daxil olduqda yönləndiriləcək login səhifəsi.
+            options.LogoutPath = "/Account/LogOut"; // Çıxış etdikdən sonra yönləndiriləcək logout səhifəsi.
+            options.AccessDeniedPath = "/Account/Denied"; // İcazəsi olmayan istifadəçi roluna görə yönləndiriləcək səhifə.
+            options.SlidingExpiration = true; // İstifadəçi aktiv olduqda cookie müddəti yenilənir (müddət tükənməsinin qarşısını alır).
+
+            // Təhlükəsizlik Təkmilləşdirmələri
+            options.Cookie.HttpOnly = true; // Cookie yalnız server tərəfindən oxuna bilər (XSS hücumlarına qarşı qoruma).
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Cookie yalnız HTTPS ilə göndəriləcək (istehsalat mühitində təhlükəsizliyi artırır).
+        });
+
+        // Authorization Xidməti
+        // Bu bölmə, layihədəki müxtəlif resurslara çıxış icazəsini idarə etmək üçün nəzərdə tutulub.
+        services.AddAuthorization(options =>
+        {
+            // "AdminPolicy" - Yalnız Admin rolunda olan istifadəçilərə icazə verir.
+            options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+
+            // "UserPolicy" - Admin və ya User rolunda olan istifadəçilərə icazə verir.
+            options.AddPolicy("UserPolicy", policy => policy.RequireRole("User", "Admin"));
+        });
+
+        // MVC Konfiqurasiyası ilə Authorization Filtri
+        services.AddMvc(config =>
+        {
+            // Ümumi authorization siyasəti: bütün istifadəçilər doğrulanmış olmalıdır.
+            var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+
+            config.Filters.Add(new AuthorizeFilter(policy)); // Doğrulanmış istifadəçi tələb edən ümumi filtr.
+            config.Filters.Add(typeof(CustomRoleControlFilterAttribute)); // Xüsusi rol yoxlama filtrini əlavə edir.
+        });
     }
     #endregion
 

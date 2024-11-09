@@ -53,6 +53,7 @@ public static class ApplicationBuilderExtensions
         var seedData = scope.ServiceProvider.GetRequiredService<EBC.Core.SeedData.SeedData>();
         await seedData.WriteSeedDataAsync();
     }
+
     #endregion
 
     #region Optional

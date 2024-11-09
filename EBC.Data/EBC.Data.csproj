@@ -1,14 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Configurations\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EBC.Core\EBC.Core.csproj" />
-    <ProjectReference Include="..\EBC.Data\EBC.Data.csproj" />
   </ItemGroup>
 
 </Project>
