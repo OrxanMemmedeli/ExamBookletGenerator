@@ -1,5 +1,6 @@
 ﻿using AccountManagerSystem.Repositories.Abstract;
 using AspNetCoreRateLimit;
+using EBC.Core.Attributes.Authentication;
 using EBC.Core.Caching.Abstract;
 using EBC.Core.Caching.Concrete;
 using EBC.Core.Constants;

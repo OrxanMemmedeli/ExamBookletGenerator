@@ -1,40 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EBC.Core.Constants;
 using System.Diagnostics.Contracts;
-using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-/// <summary>
-/// Generic Result sinifi, əməliyyatların nəticələrini idarə etmək üçün istifadə olunur.
-/// Bu sinif uğurlu və ya uğursuz nəticələri təmsil edir, həmçinin uğursuzluq hallarında
-/// istisna və ya xüsusi xəta mesajları saxlamağa imkan verir.
-/// </summary>
-/// <typeparam name="T">Uğurlu nəticə üçün qaytarılacaq dəyərin tipi.</typeparam>
-public class Result<T>
+namespace EBC.Core.Models.ResultModel;
+
+
+public class Result
 {
-    /// <summary>
-    /// Əməliyyatın nəticəsi uğurlu olduğu halda dəyəri saxlayır.
-    /// Əgər nəticə uğursuzdursa, bu dəyər <c>null</c> olacaq.
-    /// </summary>
-    public T? Value { get; private set; }
+    // Failure constructor with exception
+    protected Result(Exception exception)
+    {
+        Exception = exception;
+        IsSuccess = false;
+    }
+
+    protected Result(bool isSuccess)
+    {
+        IsSuccess = isSuccess;
+    }
+
+    protected Result() {
+        IsSuccess = true;
+
+    }
 
     /// <summary>
-    /// Uğursuz nəticə halında baş verən istisna məlumatını saxlayır.
+    /// Nəticənin uğurlu olub-olmamasını göstərir.
     /// </summary>
-    public Exception? Exception { get; private set; }
+    public bool IsSuccess { get; protected set; }
 
     /// <summary>
-    /// Nəticənin uğurlu olub-olmamasını təyin edir.
+    /// Uğursuz nəticə halında yaranan xəta mesajlarını saxlayır.
     /// </summary>
-    public bool IsSuccess { get; private set; }
+    public IEnumerable<string> FailureMessages { get; protected set; } = Array.Empty<string>();
 
     /// <summary>
-    /// Uğursuz nəticə halında baş verən xüsusi xəta mesajlarını saxlayır.
-    /// Əgər nəticə uğurludursa, bu dəyər boş bir siyahı olacaq.
+    /// İstisna obyekti ilə uğursuz nəticə.
     /// </summary>
-    public IEnumerable<string> FailureMessages { get; private set; } = Array.Empty<string>();
+    public Exception? Exception { get; protected set; }
 
     /// <summary>
-    /// Uğursuz nəticə halında istisna və ya xəta mesajlarının birləşdirilmiş halını qaytarır.
+    /// İstisna və ya xəta mesajlarını tək bir mesaj kimi qaytarır.
     /// </summary>
     public string ExceptionMessage => Exception != null
         ? Exception.Message
@@ -43,90 +49,188 @@ public class Result<T>
             : string.Empty;
 
     /// <summary>
-    /// Uğurlu nəticə üçün konstruktor.
+    /// Uğurlu nəticə yaratmaq üçün istifadə olunan metod.
     /// </summary>
-    /// <param name="value">Uğurlu nəticə dəyəri. Əgər <paramref name="value"/> <c>null</c> dəyərinə malikdirsə,
-    /// bu zaman <see cref="Activator.CreateInstance"/> vasitəsilə boş bir obyekt olaraq təyin edilir.</param>
-    protected Result(T? value)
+    public static Result Success()
     {
-        IsSuccess = true;
-        Value = value ?? (T)Activator.CreateInstance(typeof(T))!;
+        var result = new Result();
+        Succeed(result);
+        return result;
     }
 
     /// <summary>
-    /// İstisna əsasında uğursuz nəticə üçün konstruktor.
+    /// Xəta mesajları ilə uğursuz nəticə yaratmaq üçün metod.
     /// </summary>
-    /// <param name="exception">Baş verən istisna. Bu parametr <c>null</c> ola bilməz.</param>
-    protected Result(Exception exception)
+    public static Result Failure(params string[] failureMessages)
     {
-        Value = default;
-        IsSuccess = false;
-        FailureMessages = ExtractErrorMessages(exception);
-        Exception = exception ?? throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        var result = new Result();
+        Failure(result, failureMessages);
+        return result;
     }
 
     /// <summary>
-    /// Xəta mesajları əsasında uğursuz nəticə üçün konstruktor.
+    /// İstisna obyekti ilə uğursuz nəticə yaratmaq üçün metod.
     /// </summary>
-    /// <param name="failureMessages">Baş verən xətanın mesajları. Bu parametr <c>null</c> ola bilməz.</param>
-    protected Result(IEnumerable<string> failureMessages)
+    public static Result Failure(Exception exception)
     {
-        Value = default;
-        IsSuccess = false;
-        FailureMessages = failureMessages ?? throw new ArgumentNullException(nameof(failureMessages), "Failure messages cannot be null.");
-        Exception = null;
+        var result = new Result();
+        Failure(result, exception);
+        return result;
     }
 
-    /// <summary>
-    /// Uğurlu nəticə yaratmaq üçün istifadə olunur.
-    /// </summary>
-    /// <param name="value">Uğurlu nəticənin dəyəri. Dəyər göstərilməzsə, <c>null</c> və ya boş obyekt olaraq qəbul edilir.</param>
-    /// <returns>Uğurlu nəticə olan <see cref="Result{T}"/> obyekti.</returns>
-    public static Result<T> Success(T? value = default) => new(value);
+    protected static void Succeed(Result result)
+    {
+        result.IsSuccess = true;
+        result.FailureMessages = Array.Empty<string>();
+    }
 
-    /// <summary>
-    /// İstisna əsasında uğursuz nəticə yaratmaq üçün istifadə olunur.
-    /// </summary>
-    /// <param name="exception">Baş verən istisna. Bu parametr <c>null</c> ola bilməz.</param>
-    /// <returns>İstisna ilə uğursuz nəticə olan <see cref="Result{T}"/> obyekti.</returns>
-    public static Result<T> Failure(Exception exception) => new(exception);
-
-    /// <summary>
-    /// Xəta mesajları əsasında uğursuz nəticə yaratmaq üçün istifadə olunur.
-    /// </summary>
-    /// <param name="failureMessages">Baş verən xətanın mesajları. Bu parametr <c>null</c> və ya boş ola bilməz.</param>
-    /// <returns>Xəta mesajları ilə uğursuz nəticə olan <see cref="Result{T}"/> obyekti.</returns>
-    public static Result<T> Failure(params string[] failureMessages)
+    protected static void Failure(Result result, params string[] failureMessages)
     {
         Contract.Requires(failureMessages != null && failureMessages.Any());
-        return new Result<T>(failureMessages);
+        result.IsSuccess = false;
+        result.FailureMessages = failureMessages;
     }
 
-    /// <summary>
-    /// İstisna ağacındakı bütün mesajları çıxaran yardımçı metod.
-    /// </summary>
-    /// <param name="exception">Baş verən istisna.</param>
-    /// <returns>İstisna ağacında olan bütün mesajların siyahısı.</returns>
-    private static IEnumerable<string> ExtractErrorMessages(Exception exception)
+    protected static void Failure(Result result, Exception exception)
     {
+        Contract.Requires(exception != null);
+        result.IsSuccess = false;
+        result.Exception = exception;
+
         var errorMessages = new List<string>();
         while (exception != null)
         {
             errorMessages.Add(exception.Message);
             exception = exception.InnerException;
         }
-        return errorMessages;
+        result.FailureMessages = errorMessages;
+    }
+
+    public static Result ExecuteWithHandling(Func<Result> func)
+    {
+        try
+        {
+            var result = func();
+            return result.IsSuccess ? Success() : result;
+        }
+        catch (ApplicationException aex)
+        {
+            return Failure(aex);
+        }
+        catch (Exception ex)
+        {
+            return Failure(EBC.Core.Constants.ExceptionMessage.ErrorOccured);
+        }
+    }
+
+    public static async Task<Result> ExecuteWithHandlingAsync(Func<Task<Result>> func)
+    {
+        try
+        {
+            var result = await func();
+            return result.IsSuccess ? Success() : result;
+        }
+        catch (ApplicationException aex)
+        {
+            return Failure(aex);
+        }
+        catch (Exception ex)
+        {
+            return Failure(EBC.Core.Constants.ExceptionMessage.ErrorOccured);
+        }
+    }
+
+}
+
+
+/// <summary>
+/// Generic Result sinifi, əməliyyatların nəticələrini idarə etmək üçün istifadə olunur.
+/// Bu sinif uğurlu və ya uğursuz nəticələri təmsil edir, həmçinin uğursuzluq hallarında
+/// istisna və ya xüsusi xəta mesajları saxlamağa imkan verir.
+/// </summary>
+/// <typeparam name="T">Uğurlu nəticə üçün qaytarılacaq dəyərin tipi.</typeparam>
+public class Result<T> : Result
+{
+    public Result() :base() { }
+
+    // Success constructor
+    protected Result(T data) : base (true)
+    {
+        Data = data;
+    }
+
+    // Failure constructor with exception
+    protected Result(Exception exception) : base(exception) { }
+
+
+    /// <summary>
+    /// Uğurlu nəticə halında qaytarılan məlumat.
+    /// </summary>
+    public T? Data { get; private set; }
+
+    /// <summary>
+    /// Xəta mesajları ilə generik uğursuz nəticə yaratmaq üçün metod.
+    /// </summary>
+    public new static Result<T> Failure(params string[] failureMessages)
+    {
+        var result = new Result<T>();
+        Failure(result, failureMessages);
+        return result;
     }
 
     /// <summary>
-    /// Nəticəni işləmək üçün uğurlu və ya uğursuz nəticəyə əsasən uyğun metod çağırır.
+    /// İstisna obyekti ilə generik uğursuz nəticə yaratmaq üçün metod.
     /// </summary>
-    /// <typeparam name="TResult">Nəticənin qaytarılma tipi.</typeparam>
-    /// <param name="onSuccess">Uğurlu nəticə üçün işləyəcək metod.</param>
-    /// <param name="onError">Səhv nəticə üçün işləyəcək metod.</param>
-    /// <returns>İşlənmiş nəticə.</returns>
-    public TResult Match<TResult>(Func<T?, TResult> onSuccess, Func<Exception, TResult> onError)
-        => IsSuccess ? onSuccess(Value) : onError(Exception!);
+    public new static Result<T> Failure(Exception exception)
+    {
+        var result = new Result<T>();
+        Failure(result, exception);
+        return result;
+    }
+
+    /// <summary>
+    /// Uğurlu nəticə yaratmaq üçün məlumat ilə birlikdə istifadə olunur.
+    /// </summary>
+    public static Result<T> Success(T data)
+    {
+        var result = new Result<T> { Data = data };
+        Succeed(result);
+        return result;
+    }
+
+    public static Result<T> ExecuteWithHandling<T>(Func<Result<T>> func)
+    {
+        try
+        {
+            var result = func();
+            return result.IsSuccess ? Result<T>.Success(result.Data) : result;
+        }
+        catch (ApplicationException aex)
+        {
+            return Result<T>.Failure(aex);
+        }
+        catch (Exception ex)
+        {
+            return Result<T>.Failure(EBC.Core.Constants.ExceptionMessage.ErrorOccured);
+        }
+    }
+
+    public static async Task<Result<T>> ExecuteWithHandlingAsync<T>(Func<Task<Result<T>>> func)
+    {
+        try
+        {
+            var result = await func();
+            return result.IsSuccess ? Result<T>.Success(result.Data) : result;
+        }
+        catch (ApplicationException aex)
+        {
+            return Result<T>.Failure(aex);
+        }
+        catch (Exception ex)
+        {
+            return Result<T>.Failure(EBC.Core.Constants.ExceptionMessage.ErrorOccured);
+        }
+    }
 }
 
 
@@ -144,6 +248,6 @@ public static class ResultExtentions
     public static TResult Match<T, TResult>(this Result<T> result, Func<T?, TResult> onSuccess, Func<Exception, TResult> onError)
     {
         ArgumentNullException.ThrowIfNull(result);
-        return result.IsSuccess ? onSuccess(result.Value) : onError(result.Exception!);
+        return result.IsSuccess ? onSuccess(result.Data) : onError(result.Exception!);
     }
 }
