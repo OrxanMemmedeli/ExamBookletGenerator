@@ -1,6 +1,7 @@
 ﻿--------------------------  HAZIRLA  --------------------------
 
-* Validation yaz esas entityler ucun (Core hisseye)
+* Validation yaz Core hisse 
+    * esas entityler ucun (Core hisseye)
 * singnalR
 
 
