@@ -31,6 +31,9 @@ builder.Services.AddDbContext<DbContext, ExtendedDbContext>(conf =>
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(30),
             errorNumbersToAdd: null); // connection zamani xeta alinarsa
+
+        option.CommandTimeout(60); // Sorğunun maksimum icra müddətini 60 saniyə olaraq təyin edir
+
     });
 
 });

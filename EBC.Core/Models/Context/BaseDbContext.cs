@@ -54,7 +54,12 @@ public abstract class BaseDbContext : DbContext
 
             optionsBuilder.UseSqlServer(connectionString, option =>
             {
-                option.EnableRetryOnFailure(); // Yenidən cəhd etmə xüsusiyyəti
+                option.EnableRetryOnFailure(
+                            maxRetryCount: 5,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null); // connection zamani xeta alinarsa
+
+                option.CommandTimeout(60); // Sorğunun maksimum icra müddətini 60 saniyə olaraq təyin edir
             });
         }
     }
@@ -81,6 +86,11 @@ public abstract class BaseDbContext : DbContext
 
         // Global Filter query əlavəsi üçün
         modelBuilder.Entity<BaseEntity<Guid>>().HasQueryFilter(x => !x.IsDeleted);
+
+        // IsDeleted=false olan qeydlər üzrə indeks yaradır və filtrləmə tətbiq edir
+        modelBuilder.Entity<BaseEntity<Guid>>()
+            .HasIndex(x => x.IsDeleted)
+            .HasFilter("[IsDeleted] = 0"); // SQL ifadəsində 0 false olaraq qəbul edilir
 
         base.OnModelCreating(modelBuilder);
     }
