@@ -1,4 +1,8 @@
 ﻿--------------------------  HAZIRLA  --------------------------
+* CreateDate ve MofifyDate Base hissede yeri deyismelidirmi? status ve digeri ile eyni mena kesb edir.
+    * deyissen validayion hissesinde nezere almaq lazimdir
+
+
 * Create ve Modify User Id (CurrentUserden oxu)
     * Company (entity) - PaymentSummary Id yoxdur (NIYE)
     * QuestionParameter - QuestionType ve SubjectParameter Id yoxdur (NIYE)
