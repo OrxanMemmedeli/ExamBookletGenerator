@@ -1,5 +1,5 @@
 ﻿namespace EBC.Core.Models.Commons;
 
-public class BaseEntityCreateDTO
+public abstract class BaseEntityCreateDTO
 {
 }

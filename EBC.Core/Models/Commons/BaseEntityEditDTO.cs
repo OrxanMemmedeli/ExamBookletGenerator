@@ -1,5 +1,5 @@
 ﻿namespace EBC.Core.Models.Commons;
 
-public class BaseEntityEditDTO : BaseEntityViewDTO
+public abstract class BaseEntityEditDTO : BaseEntityViewDTO
 {
 }

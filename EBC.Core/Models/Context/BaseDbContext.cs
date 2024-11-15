@@ -84,14 +84,6 @@ public abstract class BaseDbContext : DbContext
         // Assembly içərisindəki bütün IEntityTypeConfiguration interfeysindən miras alanları tətbiq edir
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        // Global Filter query əlavəsi üçün
-        modelBuilder.Entity<BaseEntity<Guid>>().HasQueryFilter(x => !x.IsDeleted);
-
-        // IsDeleted=false olan qeydlər üzrə indeks yaradır və filtrləmə tətbiq edir
-        modelBuilder.Entity<BaseEntity<Guid>>()
-            .HasIndex(x => x.IsDeleted)
-            .HasFilter("[IsDeleted] = 0"); // SQL ifadəsində 0 false olaraq qəbul edilir
-
         base.OnModelCreating(modelBuilder);
     }
 

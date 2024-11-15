@@ -1,42 +1,45 @@
 ﻿--------------------------  HAZIRLA  --------------------------
+* Create ve Modify User Id (CurrentUserden oxu)
+    * Company (entity) - PaymentSummary Id yoxdur (NIYE)
+    * QuestionParameter - QuestionType ve SubjectParameter Id yoxdur (NIYE)
+    * Confiquration hissesinde Create ve ModifyUser meselesi hell edilmelidir.
+        * AcademicYearConfig
+        * AppUserConfig
+        * AttachmentConfig
+        * BookletConfig
+        * ExamConfig
+        * GradeConfig
+        * GroupConfig
+        * PaymentSummaryConfig
+        * QuestionConfig
+        * QuestionLevelConfig
+        * QuestionParameterConfig
+        * QuestionTypeConfig
+        * ResponseConig
+        * SectionConfig
+        * SubjectConfig
+        * SubjectParameterConfig
+        * TextConfig
+        * VariantConfig
 
-* Validation yaz Core hisse 
-    * esas entityler ucun (Core hisseye)
-* singnalR
+* Diger proyekdeki updateble field meselesine bax ve tetbit et
+   * Validationlari kopyala
 
+* AutoMapper
+    * DTO ve Entity-ler ucun 
+
+* singnalR (Anliq aktiv olan userler ucun ui)
 
 APP
-* AutoMapper
 * Fluent Validation
-* Configurations
+    * DTO-lar ucun 
 
-
-Core
-│
-│
-├── Mapping
-│   ├── AutoMapperProfile.cs
-│   └── CustomMapper.cs
-│
-├── Validation
-│   ├── Common
-│   │   └── CompanyCreateValidator.cs  // "DTO" redundantdır
-│   │
-│   ├── CompanyEditValidator.cs
-│   ├── DebtCreateValidator.cs        // PaymentOfDebt qısaldıldı
-│   ├── RoleCreateValidator.cs
-│   ├── RoleEditValidator.cs
-│   ├── UserCreateValidator.cs
-│   └── UserEditValidator.cs
-│
-└── ViewModelValidation
-    └── PasswordChangeValidator.cs   // "UserPasswordChange" qısaldıldı
 
 
 
 --------------------------   Belke   --------------------------
-* Core hissesi ucun ele bir sey yazmaq lazimdir ki, basqqa proyektde Engindeki kimi cagirmaq olsun (Elemek vacibdir)
-* Loglama ucun alet istifadesi (Oneeeeelsab etmirem)
+
+* Loglama ucun alet istifadesi (Onemli hesab etmirem)
 
 
 
@@ -55,3 +58,6 @@ Core
 * Claim sinifini teyini
 * Authentication Elave et
 * Core hisseye ApplicationDbContext elave etmek olarmi?
+* Validation yaz Core hisse 
+    * esas entityler ucun (Core hisseye)
+* Core hissesi ucun ele bir sey yazmaq lazimdir ki, basqqa proyektde Engindeki kimi cagirmaq olsun (Elemek vacibdir)

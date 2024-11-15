@@ -23,4 +23,6 @@ public static class CurrentUser
     public static string FullName => User?.FindFirst(CustomClaimTypes.FullName)?.Value ?? string.Empty;
     public static string Roles => User?.FindFirst(CustomClaimTypes.Roles)?.Value ?? string.Empty;
     public static string OrganizationAddress => User?.FindFirst(CustomClaimTypes.OrganizationAddress)?.Value ?? string.Empty;
+
+    public static Guid CompanyId => Guid.Parse(User?.FindFirst(CustomClaimTypes.CompanyId)?.Value ?? Guid.Empty.ToString());
 }

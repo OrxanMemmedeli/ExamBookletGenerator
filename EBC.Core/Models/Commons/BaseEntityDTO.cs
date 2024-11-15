@@ -3,7 +3,7 @@ using EBC.Core.CustomFilter.WorkFilter.Filters;
 
 namespace EBC.Core.Models.Commons;
 
-public class BaseEntityDTO
+public abstract class BaseEntityDTO
 {
     [IgnoreValidation]
     public bool Status { get; set; }

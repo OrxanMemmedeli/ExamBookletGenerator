@@ -3,7 +3,7 @@ using EBC.Core.CustomFilter.WorkFilter.Filters;
 
 namespace EBC.Core.Models.Commons;
 
-public class BaseEntityViewDTO : BaseEntityDTO
+public abstract class BaseEntityViewDTO : BaseEntityDTO
 {
     [IgnoreValidation]
     public Guid Id { get; set; }
