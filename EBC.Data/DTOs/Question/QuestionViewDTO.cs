@@ -2,7 +2,7 @@ using EBC.Core.Models.Commons;
 
 namespace EBC.Data.DTOs.Question;
 
-public class QuestionIndexDTO : BaseEntityViewDTO
+public class QuestionViewDTO : BaseEntityViewDTO
 {
     public string Content { get; set; }
 

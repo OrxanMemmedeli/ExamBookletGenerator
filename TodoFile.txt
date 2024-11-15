@@ -21,6 +21,23 @@
         * SubjectParameterConfig
         * TextConfig
         * VariantConfig
+    * Mapperde User meseleleri hell edilmelidir
+        * AcademicYearProfile
+        * BookletProfile
+        * ExamParameterProfile
+        * ExamProfile
+        * GradeProfile
+        * GroupProfile
+        * QuestionLevelProfile
+        * QuestionProfile
+        * QuestionTypeProfile
+        * ResponseProfile
+        * SectionProfile
+        * SubjectParameterProfile
+        * SubjectProfile
+        * TextProfile
+        * VariantProfile
+
 
 * Diger proyekdeki updateble field meselesine bax ve tetbit et
    * Validationlari kopyala

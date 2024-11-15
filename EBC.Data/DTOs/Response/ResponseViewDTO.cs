@@ -2,7 +2,7 @@ using EBC.Core.Models.Commons;
 
 namespace EBC.Data.DTOs.Response;
 
-public class ResponseIndexDTO : BaseEntityViewDTO
+public class ResponseViewDTO : BaseEntityViewDTO
 {
     public string? Title { get; set; }
     public string? Content { get; set; }

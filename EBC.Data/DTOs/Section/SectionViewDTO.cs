@@ -2,7 +2,7 @@ using EBC.Core.Models.Commons;
 
 namespace EBC.Data.DTOs.Section;
 
-public class SectionIndexDTO : BaseEntityViewDTO
+public class SectionViewDTO : BaseEntityViewDTO
 {
     public string Name { get; set; }
 

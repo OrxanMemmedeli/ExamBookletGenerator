@@ -2,7 +2,7 @@ using EBC.Core.Models.Commons;
 
 namespace EBC.Data.DTOs.Company;
 
-public class CompanyIndexDTO : BaseEntityViewDTO
+public class CompanyViewDTO : BaseEntityViewDTO
 {
     public string Name { get; set; }
     public string LogoUrl { get; set; }

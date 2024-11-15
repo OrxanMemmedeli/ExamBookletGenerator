@@ -2,7 +2,7 @@ using EBC.Core.Models.Commons;
 
 namespace EBC.Data.DTOs.QuestionType;
 
-public class QuestionTypeIndexDTO : BaseEntityViewDTO
+public class QuestionTypeViewDTO : BaseEntityViewDTO
 {
     public string ResponseType { get; set; }
     public double? ResponseCount { get; set; }

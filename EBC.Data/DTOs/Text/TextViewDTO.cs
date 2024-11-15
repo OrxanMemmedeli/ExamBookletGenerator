@@ -2,7 +2,7 @@ using EBC.Core.Models.Commons;
 
 namespace EBC.Data.DTOs.Text;
 
-public class TextIndexDTO : BaseEntityViewDTO
+public class TextViewDTO : BaseEntityViewDTO
 {
     public string Name { get; set; }
     public string Title { get; set; }
