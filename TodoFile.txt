@@ -46,15 +46,9 @@
 * Diger proyekdeki updateble field meselesine bax ve tetbit et
    * Validationlari kopyala
 
-* AutoMapper
-    * DTO ve Entity-ler ucun 
+
 
 * singnalR (Anliq aktiv olan userler ucun ui)
-
-APP
-* Fluent Validation
-    * DTO-lar ucun 
-
 
 
 
@@ -82,3 +76,23 @@ APP
 * Validation yaz Core hisse 
     * esas entityler ucun (Core hisseye)
 * Core hissesi ucun ele bir sey yazmaq lazimdir ki, basqqa proyektde Engindeki kimi cagirmaq olsun (Elemek vacibdir)
+* AutoMapper
+    * DTO ve Entity-ler ucun 
+* Fluent Validation
+    * DTO-lar ucun 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

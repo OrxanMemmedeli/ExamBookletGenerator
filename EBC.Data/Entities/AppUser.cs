@@ -1,3 +1,4 @@
+using EBC.Core.Entities.Common;
 using EBC.Core.Entities.Identity;
 using EBC.Data.Entities.CombineEntities;
 using Microsoft.AspNetCore.Http;
@@ -5,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBC.Data.Entities;
 
-public class AppUser : User
+public class AppUser : User, IAuditable
 {
     public AppUser()
     {

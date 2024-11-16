@@ -14,21 +14,12 @@ public class QuestionParameterConfig : BaseEntityConfig<QuestionParameter, Guid>
         builder.HasOne(x => x.QuestionType)
             .WithMany(x => x.QuestionParameters)
             .HasForeignKey(x => x.QuestionTypeId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.SubjectParameter)
             .WithMany(x => x.QuestionParameters)
             .HasForeignKey(x => x.SubjectParameterId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
-        //builder.HasOne(x => x.CreatUser)
-        //    .WithMany(x => x.QuestionParameters)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasOne(x => x.ModifyUser)
-        //    .WithMany(x => x.QuestionParametersM)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

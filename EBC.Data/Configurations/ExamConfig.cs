@@ -14,21 +14,12 @@ public class ExamConfig : BaseEntityConfig<Exam, Guid>
         builder.HasOne(x => x.Grade)
             .WithMany(x => x.Exams)
             .HasForeignKey(x => x.GradeId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.ExamParameter)
             .WithMany(x => x.Exams)
             .HasForeignKey(x => x.ExamParameterId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
-        //builder.HasOne(x => x.CreatUser)
-        //    .WithMany(x => x.Exams)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasOne(x => x.ModifyUser)
-        //    .WithMany(x => x.ExamsM)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

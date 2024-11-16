@@ -16,7 +16,13 @@ public class BaseEntityEditDTOValidator<TDto> : BaseValidator<TDto> where TDto :
     public BaseEntityEditDTOValidator()
     {
         // Xüsusi qaydalar buraya əlavə oluna bilər
-        RuleFor(x => x.CreatedDate).Must(date => date >= DateTime.Now.AddMinutes(-2) && date != null).WithMessage(ValidationMessage.DateTimeMinValue);
+        RuleFor(x => x.CreatedDate)
+            .Must(date => date >= DateTime.Now.AddMinutes(-10) && date != default(DateTime))
+            .WithMessage(ValidationMessage.DateTimeMinValue);
+
+        RuleFor(x => x.ModifiedDate)
+            .Must(date => date >= DateTime.Now.AddMinutes(-10) && date != default(DateTime))
+            .WithMessage(ValidationMessage.DateTimeMinValue);
 
     }
 }

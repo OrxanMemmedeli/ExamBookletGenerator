@@ -3,7 +3,7 @@ using EBC.Data.Entities.CombineEntities;
 
 namespace EBC.Data.Entities;
 
-public class Question : BaseEntity<Guid>
+public class Question : BaseEntity<Guid>, IAuditable
 {
     public Question()
     {

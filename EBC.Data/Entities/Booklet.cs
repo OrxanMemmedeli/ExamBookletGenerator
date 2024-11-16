@@ -2,7 +2,7 @@ using EBC.Core.Entities.Common;
 
 namespace EBC.Data.Entities;
 
-public class Booklet : BaseEntity<Guid>
+public class Booklet : BaseEntity<Guid>, IAuditable
 {
     public Guid GradeId { get; set; }
     public Guid? GroupId { get; set; }

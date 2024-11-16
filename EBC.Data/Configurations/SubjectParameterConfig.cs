@@ -14,21 +14,11 @@ public class SubjectParameterConfig : BaseEntityConfig<SubjectParameter, Guid>
         builder.HasOne(x => x.Subject)
             .WithMany(x => x.SubjectParameters)
             .HasForeignKey(x => x.SubjectId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.ExamParameter)
             .WithMany(x => x.SubjectParameters)
             .HasForeignKey(x => x.ExamParameterId)
-            .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasOne(x => x.CreatUser)
-        //    .WithMany(x => x.SubjectParameters)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasOne(x => x.ModifyUser)
-        //    .WithMany(x => x.SubjectParametersM)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

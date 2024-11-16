@@ -14,36 +14,27 @@ public class BookletConfig : BaseEntityConfig<Booklet, Guid>
         builder.HasOne(x => x.Grade)
             .WithMany(x => x.Booklets)
             .HasForeignKey(x => x.GradeId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Group)
             .WithMany(x => x.Booklets)
             .HasForeignKey(x => x.GroupId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Variant)
             .WithMany(x => x.Booklets)
             .HasForeignKey(x => x.VariantId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Exam)
             .WithMany(x => x.Booklets)
             .HasForeignKey(x => x.ExamId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.AcademicYear)
             .WithMany(x => x.Booklets)
             .HasForeignKey(x => x.AcademicYearId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
-        //builder.HasOne(x => x.CreatUser)
-        //    .WithMany(x => x.Booklets)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasOne(x => x.ModifyUser)
-        //    .WithMany(x => x.BookletsM)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

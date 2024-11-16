@@ -1,4 +1,4 @@
-using EBC.Core.Entities.Configurations.Common;
+﻿using EBC.Core.Entities.Configurations.Common;
 using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,193 +14,79 @@ public class AppUserConfig : BaseEntityConfig<AppUser, Guid>
         builder.HasOne(x => x.UserType)
             .WithMany(x => x.AppUsers)
             .HasForeignKey(x => x.UserTypeId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
 
+        #region ConfigureField
 
-        //builder.HasMany(x => x.AcademicYears)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        // Burada xüsusi sahə konfiqurasiyalarını çağırırıq
+        ConfigureField(builder, nameof(AppUser.AcademicYears), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.AcademicYearsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.AcademicYearsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.Grades), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.GradesM), "ModifyUser", "ModifiedUserId");
 
+        ConfigureField(builder, nameof(AppUser.Questions), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.QuestionsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.Grades)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.QuestionLevels), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.QuestionLevelsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.GradesM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.QuestionTypes), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.QuestionTypesM), "ModifyUser", "ModifiedUserId");
 
+        ConfigureField(builder, nameof(AppUser.Responses), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.ResponsesM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.Questions)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.Subjects), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.SubjectsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.QuestionsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.Sections), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.SectionsM), "ModifyUser", "ModifiedUserId");
 
+        ConfigureField(builder, nameof(AppUser.Exams), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.ExamsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.QuestionLevels)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.SubjectParameters), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.SubjectParametersM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.QuestionLevelsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.ExamParameters), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.ExamParametersM), "ModifyUser", "ModifiedUserId");
 
+        ConfigureField(builder, nameof(AppUser.Texts), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.TextsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.QuestionTypes)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.Variants), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.VariantsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.QuestionTypesM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.QuestionParameters), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.QuestionParametersM), "ModifyUser", "ModifiedUserId");
 
+        ConfigureField(builder, nameof(AppUser.Attachments), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.AttachmentsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.Responses)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.Groups), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.GroupsM), "ModifyUser", "ModifiedUserId");
 
-        //builder.HasMany(x => x.ResponsesM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        ConfigureField(builder, nameof(AppUser.Booklets), "CreatUser", "CreatedUserId");
+        ConfigureField(builder, nameof(AppUser.BookletsM), "ModifyUser", "ModifiedUserId");
 
+        #endregion
+    }
 
-        //builder.HasMany(x => x.Subjects)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+    private void ConfigureField(EntityTypeBuilder<AppUser> builder, string collectionName, string navigationName, string foreignKeyName)
+    {
+        var propertyInfo = typeof(AppUser).GetProperty(collectionName);
+        if (propertyInfo == null)
+            throw new InvalidOperationException($"Property '{collectionName}' not found in AppUser.");
 
-        //builder.HasMany(x => x.SubjectsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        var collectionType = propertyInfo.PropertyType.GetGenericArguments().FirstOrDefault();
+        if (collectionType == null)
+            throw new InvalidOperationException($"Invalid collection type for property '{collectionName}' in AppUser.");
 
-
-        //builder.HasMany(x => x.Sections)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.SectionsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.Exams)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.ExamsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-
-        //builder.HasMany(x => x.SubjectParameters)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.SubjectParametersM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-
-        //builder.HasMany(x => x.ExamParameters)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.ExamParametersM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-
-        //builder.HasMany(x => x.Texts)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.TextsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-
-        //builder.HasMany(x => x.Variants)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.VariantsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-
-        //builder.HasMany(x => x.QuestionParameters)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.QuestionParametersM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-
-        //builder.HasMany(x => x.Booklets)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.BookletsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-
-        //builder.HasMany(x => x.Groups)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.GroupsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);      
-
-
-        //builder.HasMany(x => x.Attachments)
-        //    .WithOne(x => x.CreatUser)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasMany(x => x.AttachmentsM)
-        //    .WithOne(x => x.ModifyUser)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+        builder.HasMany(collectionType, collectionName)
+            .WithOne(navigationName)
+            .HasForeignKey(foreignKeyName)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

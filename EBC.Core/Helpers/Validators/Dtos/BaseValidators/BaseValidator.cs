@@ -19,6 +19,7 @@ public abstract class BaseValidator<TDto> : AbstractValidator<TDto>
     {
         // Ümumi qaydalar tətbiq olunur (nullable olmayan bütün tiplər üçün)
         ApplyCommonRules();
+
     }
 
     /// <summary>

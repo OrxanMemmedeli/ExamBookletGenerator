@@ -14,16 +14,6 @@ public class SectionConfig : BaseEntityConfig<Section, Guid>
         builder.HasOne(x => x.Subject)
             .WithMany(x => x.Sections)
             .HasForeignKey(x => x.SubjectId)
-            .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasOne(x => x.CreatUser)
-        //    .WithMany(x => x.Sections)
-        //    .HasForeignKey(x => x.CreatUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
-
-        //builder.HasOne(x => x.ModifyUser)
-        //    .WithMany(x => x.SectionsM)
-        //    .HasForeignKey(x => x.ModifyUserId)
-        //    .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

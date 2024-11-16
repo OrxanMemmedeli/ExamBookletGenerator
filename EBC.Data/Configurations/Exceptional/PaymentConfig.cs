@@ -11,6 +11,6 @@ public class PaymentConfig : IEntityTypeConfiguration<Payment>
         builder.HasOne(x => x.Company)
             .WithMany(x => x.Payments)
             .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

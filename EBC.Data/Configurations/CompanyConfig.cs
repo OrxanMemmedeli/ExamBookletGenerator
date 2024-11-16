@@ -15,6 +15,6 @@ public class CompanyConfig : BaseEntityConfig<Company, Guid>
             .WithOne(x => x.Company)
             .HasForeignKey<PaymentSummary>(x => x.CompanyId)
             .IsRequired()
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

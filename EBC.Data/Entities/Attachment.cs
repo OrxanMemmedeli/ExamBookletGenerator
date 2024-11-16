@@ -4,7 +4,7 @@ using EBC.Data.Enums;
 
 namespace EBC.Data.Entities;
 
-public class Attachment : BaseEntity<Guid>
+public class Attachment : BaseEntity<Guid>, IAuditable
 {
     public Attachment()
     {

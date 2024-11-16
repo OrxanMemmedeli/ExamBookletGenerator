@@ -2,7 +2,7 @@ using EBC.Core.Entities.Common;
 
 namespace EBC.Data.Entities;
 
-public class QuestionParameter : BaseEntity<Guid>
+public class QuestionParameter : BaseEntity<Guid>, IAuditable
 {
 
     public Guid QuestionTypeId { get; set; }

@@ -2,7 +2,7 @@ using EBC.Core.Entities.Common;
 
 namespace EBC.Data.Entities;
 
-public class SubjectParameter : BaseEntity<Guid>
+public class SubjectParameter : BaseEntity<Guid>, IAuditable
 {
     public SubjectParameter()
     {

@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace EBC.Core.Entities.Common;
+﻿namespace EBC.Core.Entities.Common;
 
 public abstract class BaseEntity<T> : Entity<T>
 {

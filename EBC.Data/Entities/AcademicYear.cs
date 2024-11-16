@@ -1,7 +1,7 @@
 using EBC.Core.Entities.Common;
 
 namespace EBC.Data.Entities;
-public class AcademicYear : BaseEntity<Guid>
+public class AcademicYear : BaseEntity<Guid>, IAuditable
 {
     public AcademicYear()
     {

@@ -5,6 +5,8 @@ using EBC.Core.Helpers.StartupFinders;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 using EBC.Core.Entities.Common;
+using EBC.Core.Attributes.Authentication;
+using EBC.Core.Helpers.Authentication;
 
 namespace EBC.Core.Models.Context;
 
@@ -140,15 +142,17 @@ public abstract class BaseDbContext : DbContext
             .Where(i => i.State == EntityState.Modified && i.Entity is BaseEntity<Guid>)
             .Select(x => (BaseEntity<Guid>)x.Entity);
 
-        PrepareAddedEntities(addedEntities);
-        PrepareEditedEntities(editedEntities);
+        var currentUser = CurrentUser.UserId;
+
+        PrepareAddedEntities(addedEntities, currentUser);
+        PrepareEditedEntities(editedEntities, currentUser);
     }
 
     /// <summary>
     /// Yeni əlavə edilmiş `Entity`-lər üçün standart dəyərləri təyin edir.
     /// </summary>
     /// <param name="addedEntities">Yeni əlavə edilmiş `Entity`-lərin siyahısı.</param>
-    private void PrepareAddedEntities(IEnumerable<BaseEntity<Guid>> addedEntities)
+    private void PrepareAddedEntities(IEnumerable<BaseEntity<Guid>> addedEntities, Guid? currentUser)
     {
         foreach (var entity in addedEntities)
         {
@@ -156,6 +160,17 @@ public abstract class BaseDbContext : DbContext
             entity.ModifiedDate = DateTime.Now;
             entity.Status = true;
             entity.IsDeleted = false;
+
+            //User Ile inteqrasiyası olanlar üçün fieldlər set edilir.
+            if (entity is IAuditable auditableEntity)
+            {
+                SetPropertyIfExists(entity, "CreatedUserId", currentUser);
+                SetPropertyIfExists(entity, "ModifiedUserId", currentUser);
+
+                // Lazım olarsa navigasiya sahələrini də təyin edə bilərsiniz:
+                SetPropertyIfExists(entity, "CreatedUser", null);
+                SetPropertyIfExists(entity, "ModifiedUser", null);
+            }
         }
     }
 
@@ -163,11 +178,27 @@ public abstract class BaseDbContext : DbContext
     /// Dəyişdirilmiş `Entity`-lər üçün `ModifiedDate` sahəsini yeniləyir.
     /// </summary>
     /// <param name="editedEntities">Dəyişdirilmiş `Entity`-lərin siyahısı.</param>
-    private void PrepareEditedEntities(IEnumerable<BaseEntity<Guid>> editedEntities)
+    private void PrepareEditedEntities(IEnumerable<BaseEntity<Guid>> editedEntities, Guid? currentUser)
     {
         foreach (var entity in editedEntities)
         {
             entity.ModifiedDate = DateTime.Now;
+
+            //User Ile inteqrasiyası olanlar üçün fieldlər set edilir.
+            if (entity is IAuditable auditableEntity)
+            {
+                SetPropertyIfExists(entity, "ModifiedUserId", currentUser);
+                SetPropertyIfExists(entity, "ModifiedUser", null);
+            }
+        }
+    }
+
+    private void SetPropertyIfExists(object obj, string propertyName, object value)
+    {
+        var property = obj.GetType().GetProperty(propertyName);
+        if (property != null && property.CanWrite)
+        {
+            property.SetValue(obj, value);
         }
     }
 }
