@@ -109,5 +109,15 @@ public static class ApplicationBuilderExtensions
         // Health Checks UI
         app.UseHealthChecksUI(config => config.UIPath = "/health-ui");
     }
+
+    private static void UseDefaultCors(IApplicationBuilder app)
+    {
+        if (!ServiceOptions.UseDefaultCors)
+            return;
+
+        app.UseCors("AllowAllOrigins");
+
+    }
+
     #endregion
 }

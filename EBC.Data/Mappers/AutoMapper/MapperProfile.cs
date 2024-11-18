@@ -30,8 +30,8 @@ public class MapperProfile : Profile
     {
         #region AcademicYearProfile
         CreateMap<AcademicYear, AcademicYearViewDTO>()
-        //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
-        .ReverseMap();
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
+            .ReverseMap();
 
         CreateMap<AcademicYear, AcademicYearCreateDTO>().ReverseMap();
         CreateMap<AcademicYear, AcademicYearEditDTO>().ReverseMap();
@@ -46,7 +46,7 @@ public class MapperProfile : Profile
 
         #region BookletProfile
         CreateMap<Booklet, BookletViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ForMember(dest => dest.ExamName, opt => opt.MapFrom(src => src.Exam.Name))
             .ForMember(dest => dest.AcademicYearName, opt => opt.MapFrom(src => src.AcademicYear.Name))
             .ForMember(dest => dest.VariantName, opt => opt.MapFrom(src => src.Variant.Name))
@@ -68,8 +68,8 @@ public class MapperProfile : Profile
 
         #region ExamParameterProfile
         CreateMap<ExamParameter, ExamParameterViewDTO>()
-        //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
-        .ReverseMap();
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
+            .ReverseMap();
 
         CreateMap<ExamParameter, ExamParameterCreateDTO>().ReverseMap();
         CreateMap<ExamParameter, ExamParameterEditDTO>().ReverseMap();
@@ -78,7 +78,7 @@ public class MapperProfile : Profile
 
         #region ExamProfile
         CreateMap<Exam, ExamViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ForMember(dest => dest.GradeName, opt => opt.MapFrom(src => src.Grade.Name))
             .ForMember(dest => dest.ExamParameterName, opt => opt.MapFrom(src => src.ExamParameter.Name))
             .ReverseMap();
@@ -90,8 +90,8 @@ public class MapperProfile : Profile
 
         #region GradeProfile
         CreateMap<Grade, GradeViewDTO>()
-        //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
-        .ReverseMap();
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
+            .ReverseMap();
 
         CreateMap<Grade, GradeCreateDTO>().ReverseMap();
         CreateMap<GradeEditDTO, Grade>()
@@ -102,7 +102,7 @@ public class MapperProfile : Profile
 
         #region GroupProfile
         CreateMap<Group, GroupViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ReverseMap();
 
         CreateMap<Group, GroupCreateDTO>().ReverseMap();
@@ -123,7 +123,7 @@ public class MapperProfile : Profile
 
         #region QuestionLevelProfile
         CreateMap<QuestionLevel, QuestionLevelViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ReverseMap();
 
         CreateMap<QuestionLevel, QuestionLevelCreateDTO>().ReverseMap();
@@ -133,7 +133,7 @@ public class MapperProfile : Profile
 
         #region QuestionProfile
         CreateMap<Question, QuestionViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.Name))
             .ForMember(dest => dest.SectionName, opt => opt.MapFrom(src => src.Section.Name))
             .ForMember(dest => dest.QuestionLevelName, opt => opt.MapFrom(src => src.QuestionLevel.Name))
@@ -149,7 +149,7 @@ public class MapperProfile : Profile
 
         #region QuestionTypeProfile
         CreateMap<QuestionType, QuestionTypeViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ReverseMap();
 
         CreateMap<QuestionType, QuestionTypeCreateDTO>().ReverseMap();
@@ -159,7 +159,7 @@ public class MapperProfile : Profile
 
         #region ResponseProfile
         CreateMap<Response, ResponseViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.Name))
             .ForMember(dest => dest.QuestionTypeName, opt => opt.MapFrom(src => src.QuestionType.ResponseType))
             .ForMember(dest => dest.QuestionName, opt => opt.MapFrom(src => src.Question.Content))
@@ -174,7 +174,7 @@ public class MapperProfile : Profile
         #region SectionProfile
         CreateMap<Section, SectionViewDTO>()
             .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.Name))
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ReverseMap();
 
         CreateMap<Section, SectionCreateDTO>().ReverseMap();
@@ -184,7 +184,7 @@ public class MapperProfile : Profile
 
         #region SubjectParameterProfile
         CreateMap<SubjectParameter, SubjectParameterViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.Name))
             .ForMember(dest => dest.ExamParameterName, opt => opt.MapFrom(src => src.ExamParameter.Name))
             .ReverseMap();
@@ -196,7 +196,7 @@ public class MapperProfile : Profile
 
         #region SubjectProfile
         CreateMap<Subject, SubjectViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ReverseMap();
 
         CreateMap<Subject, SubjectCreateDTO>().ReverseMap();
@@ -206,7 +206,7 @@ public class MapperProfile : Profile
 
         #region TextProfile
         CreateMap<Text, TextViewDTO>()
-            //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
             .ReverseMap();
 
         CreateMap<Text, TextCreateDTO>().ReverseMap();
@@ -215,7 +215,7 @@ public class MapperProfile : Profile
 
 
         #region UserTypeProfile
-        CreateMap<UserType, UserTypeViewDTO>();
+        CreateMap<UserType, UserTypeViewDTO>().ReverseMap();
 
         CreateMap<UserType, UserTypeCreateDTO>().ReverseMap();
         CreateMap<UserType, UserTypeEditDTO>().ReverseMap();
@@ -224,8 +224,8 @@ public class MapperProfile : Profile
 
         #region VariantProfile
         CreateMap<Variant, VariantViewDTO>()
-              //.ForMember(dest => dest.ModifyUserName, opt => opt.MapFrom(src => src.ModifyUser.UserName))
-              .ReverseMap();
+            .MapAuditableFields(mapCreatedUser: false, mapModifiedUser: true)
+            .ReverseMap();
 
         CreateMap<Variant, VariantCreateDTO>().ReverseMap();
         CreateMap<Variant, VariantEditDTO>().ReverseMap();

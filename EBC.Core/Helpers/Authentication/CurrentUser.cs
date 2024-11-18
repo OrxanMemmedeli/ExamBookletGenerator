@@ -6,10 +6,13 @@ namespace EBC.Core.Helpers.Authentication;
 public static class CurrentUser
 {
     private static IHttpContextAccessor _httpContextAccessor;
-
-    public static void Configure(IHttpContextAccessor httpContextAccessor)
+    private static UserSessionManagerService _userSessionManagerService;
+    public static void Configure(
+        IHttpContextAccessor httpContextAccessor, 
+        UserSessionManagerService userSessionManagerService)
     {
         _httpContextAccessor = httpContextAccessor;
+        _userSessionManagerService = userSessionManagerService;
     }
 
     private static ClaimsPrincipal User => _httpContextAccessor?.HttpContext?.User;
@@ -23,6 +26,15 @@ public static class CurrentUser
     public static string FullName => User?.FindFirst(CustomClaimTypes.FullName)?.Value ?? string.Empty;
     public static string Roles => User?.FindFirst(CustomClaimTypes.Roles)?.Value ?? string.Empty;
     public static string OrganizationAddress => User?.FindFirst(CustomClaimTypes.OrganizationAddress)?.Value ?? string.Empty;
-
+    public static DateTime LoginTime => DateTime.Parse(User?.FindFirst(CustomClaimTypes.LoginTime)?.Value ?? default(DateTime).ToString());
     public static Guid CompanyId => Guid.Parse(User?.FindFirst(CustomClaimTypes.CompanyId)?.Value ?? Guid.Empty.ToString());
+
+    public static void RegisterUserSession()
+    {
+        if (UserId != Guid.Empty && !string.IsNullOrEmpty(UserName))
+        {
+            _userSessionManagerService.AddOrUpdateUser(UserId, UserName, LoginTime);
+        }
+    }
+
 }

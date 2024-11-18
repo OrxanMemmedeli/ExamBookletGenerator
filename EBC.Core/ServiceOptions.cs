@@ -9,6 +9,7 @@ public static class ServiceOptions
     public static bool UseMiniProfiler { get; private set; } = false;
     public static bool UseBackgroundService { get; private set; } = false;
     public static bool UseAuthenticationService { get; private set; } = false;
+    public static bool UseDefaultCors { get; private set; } = false;
 
 
     // ServiceOptions təyin etmək üçün statik bir metod yaradılır
@@ -19,7 +20,8 @@ public static class ServiceOptions
         bool useHealthChecks, 
         bool useMiniProfiler, 
         bool useBackgroundService,
-        bool useAuthenticationService)
+        bool useAuthenticationService,
+        bool useDefaultCors)
     {
         UseRateLimiting = useRateLimiting;
         UseHangfire = useHangfire;
@@ -28,5 +30,6 @@ public static class ServiceOptions
         UseMiniProfiler = useMiniProfiler;
         UseBackgroundService = useBackgroundService;
         UseAuthenticationService = useAuthenticationService;
+        UseDefaultCors = useDefaultCors;
     }
 }

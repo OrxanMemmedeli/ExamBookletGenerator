@@ -4,6 +4,7 @@ using EBC.Core.Attributes.Authentication;
 using EBC.Core.Caching.Abstract;
 using EBC.Core.Caching.Concrete;
 using EBC.Core.Constants;
+using EBC.Core.Helpers.Authentication;
 using EBC.Core.Helpers.StartupFinders;
 using EBC.Core.Middlewares;
 using EBC.Core.Models;
@@ -71,6 +72,12 @@ public static class ServiceRegistration
         // BacgroundService
         RegisterBackgroundService(services, configuration);
 
+        // Authentication
+        RegisterAuthenticationServices(services, configuration);
+
+        // DefaultCors
+        RegisterDefaultCors(services);
+
         return services;
     }
 
@@ -95,6 +102,20 @@ public static class ServiceRegistration
         {
             configuration.GetSection(GoogleReCaptureConfigModel.GoogleConfig).Bind(options);
         }); //recaptcha
+
+
+        #region Session Manager Service ucun konfiqurasiya
+
+        services.AddSingleton<UserSessionManagerService>();
+        services.AddHttpContextAccessor();
+
+        // `CurrentUser` konfiqurasiyası
+        var serviceProvider = services.BuildServiceProvider();
+        var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+        var userSessionManager = serviceProvider.GetService<UserSessionManagerService>();
+        CurrentUser.Configure(httpContextAccessor, userSessionManager);
+
+        #endregion
 
     }
 
@@ -144,7 +165,7 @@ public static class ServiceRegistration
                 services.AddScoped(repositoryInterfaceType, repositoryType);
         }
     }
-   
+
     private static void AddMiddlewares(IServiceCollection services, bool isDevelopment)
     {
         // Middleware qeydiyyatı
@@ -209,8 +230,11 @@ public static class ServiceRegistration
         services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
         services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
 
-        // ClientId və ClientIp məlumatlarının əldə edilməsi üçün HttpContextAccessor istifadə olunur
-        services.AddHttpContextAccessor();
+
+
+        //Eger global olaraq AddHttpContextAccessor istifade edilmeyibse buraya elave edilmelidir. (ClientId və ClientIp məlumatlarının əldə edilməsi üçün HttpContextAccessor istifadə olunur)
+
+
 
         // Əsasən `async` əməliyyatları idarə etmək üçün `AsyncKeyLockProcessingStrategy` əlavə olunur
         services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
@@ -260,13 +284,16 @@ public static class ServiceRegistration
     /// </summary>
     /// <param name="services">Servis kolleksiyası.</param>
     /// <param name="configuration">Konfiqurasiya məlumatlarını ehtiva edən IConfiguration obyekti.</param>
-    public static void AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
     {
+        if (!ServiceOptions.UseAuthenticationService)
+            return;
+
         // Cookie Autentifikasiyası
         // Bu bölmə, istifadəçinin sessiyasını idarə etmək və autentifikasiya cookie-lərini təyin etmək üçün nəzərdə tutulub.
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
         {
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(90); // Cookie-nin müddəti bitmə vaxtı (90 dəqiqə).
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(ApplicationCommonField.ExpireTimeSpan); // Cookie-nin müddəti bitmə vaxtı (90 dəqiqə).
             options.LoginPath = "/Account/Login"; // İstifadəçi doğrulama tələb olunan yerə daxil olduqda yönləndiriləcək login səhifəsi.
             options.LogoutPath = "/Account/LogOut"; // Çıxış etdikdən sonra yönləndiriləcək logout səhifəsi.
             options.AccessDeniedPath = "/Account/Denied"; // İcazəsi olmayan istifadəçi roluna görə yönləndiriləcək səhifə.
@@ -284,8 +311,11 @@ public static class ServiceRegistration
             // "AdminPolicy" - Yalnız Admin rolunda olan istifadəçilərə icazə verir.
             options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
 
-            // "UserPolicy" - Admin və ya User rolunda olan istifadəçilərə icazə verir.
-            options.AddPolicy("UserPolicy", policy => policy.RequireRole("User", "Admin"));
+            // "ManagerPolicy" - Yalnız Admin və ya Manager rolunda olan istifadəçilərə icazə verir.
+            options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager", "Admin"));
+
+            // "UserPolicy" - Admin, Manager və ya User rolunda olan istifadəçilərə icazə verir.
+            options.AddPolicy("UserPolicy", policy => policy.RequireRole("User", "Manager", "Admin"));
         });
 
         // MVC Konfiqurasiyası ilə Authorization Filtri
@@ -300,6 +330,25 @@ public static class ServiceRegistration
             config.Filters.Add(typeof(CustomRoleControlFilterAttribute)); // Xüsusi rol yoxlama filtrini əlavə edir.
         });
     }
+    
+    private static void RegisterDefaultCors(IServiceCollection services)
+    {
+        if (!ServiceOptions.UseDefaultCors)
+            return;
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAllOrigins",
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+        });
+
+    }
+
     #endregion
 
 }

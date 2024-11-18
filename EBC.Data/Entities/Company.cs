@@ -24,6 +24,7 @@ public class Company : BaseEntity<Guid>
     public bool IsFree { get; set; }
     public bool IsPenal { get; set; }
 
+    public Guid? PaymentSummaryId { get; set; }
     public virtual PaymentSummary? PaymentSummary { get; set; }
 
     #region Collections 

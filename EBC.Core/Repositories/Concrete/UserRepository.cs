@@ -42,9 +42,15 @@ public class UserRepository : GenericRepository<User>, IUserRepository
 
         var userDto = new UserLoginResponseDTO
         {
+            UserId = user.Id,
+            IsAdmin = user.UserRoles.Select(user => user.Role.Name).Contains(ApplicationCommonField.adminRoleName),
+            IsManager = user.UserRoles.Select(user => user.Role.Name).Contains(ApplicationCommonField.managerRoleName),
+            UserName = user.UserName,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            UserName = user.UserName,
+            FullName = user.FirstName + ' ' + user.LastName,
+            LoginTime = DateTime.Now,
+
 
             Roles = string.Join(", ", user.UserRoles.Select(user => user.Role.Name)),
 

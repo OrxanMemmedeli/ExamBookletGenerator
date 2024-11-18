@@ -1,6 +1,7 @@
 ﻿using EBC.Core;
 using EBC.Core.Helpers.StartupFinders;
 using EBC.Data.Contexts;
+using ExamBookletGenerator.Hubs;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
@@ -14,7 +15,8 @@ ServiceOptions.Configure(
     useHealthChecks: true,
     useMiniProfiler: true,
     useBackgroundService: true,
-    useAuthenticationService: true
+    useAuthenticationService: false,
+    useDefaultCors: false
 );
 
 // Add services to the container.
@@ -42,6 +44,7 @@ builder.Services.AddDbContext<DbContext, ExtendedDbContext>(conf =>
 //Layers Services
 builder.Services.AddCoreLayerServices(configuration: builder.Configuration, isDevelopment: builder.Environment.IsDevelopment());
 
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -65,18 +68,20 @@ app.UseRouting();
 
 // Authentication və Authorization istifadəsi
 app.UseAuthentication(); // İstifadəçinin doğrulama vəziyyətini yoxlayır (login olub-olmadığını təsdiqləyir).
-if (!ServiceOptions.UseAuthenticationService)
+if (ServiceOptions.UseAuthenticationService)
     app.UseAuthorization();   // İstifadəçi icazələrini yoxlayır (resurslara çıxış icazələrini idarə edir).
 
 //Layers App
 await app.UseCoreLayerCustomApplication();
 
 //Hangfire
-if (!ServiceOptions.UseHangfire)
+if (ServiceOptions.UseHangfire)
     app.MapHangfireDashboard(); ///hangfire
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<UserActivityHub>("/userActivityHub");
 
 app.Run();

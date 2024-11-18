@@ -26,4 +26,6 @@ public static class ApplicationCommonField
     public const string edit = "Edit";
     public const string delete = "Delete";
 
+    public const int ExpireTimeSpan = 90;
+
 }
