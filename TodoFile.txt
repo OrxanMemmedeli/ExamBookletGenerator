@@ -3,6 +3,7 @@
 * Data Layerdeki Entiti-ler ucun Repositoryler elave edilmelidir
     * Repolardan sonra Login methodundaki Company Id meselesine bax (AppUserRepo-dan ceksin melumati)
 
+
 --------------------------   Belke   --------------------------
 
 * Loglama ucun alet istifadesi (Onemli hesab etmirem)
@@ -75,7 +76,7 @@
 * Default Cors ayarlari elave et (optional)
 * singnalR (Anliq aktiv olan userler ucun ui)
 
-
+* Word Document ile işləyə bilmək üçün OpenXML confiqurasiyasi
 
 
 
