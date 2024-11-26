@@ -6,7 +6,7 @@
 
 --------------------------   Belke   --------------------------
 
-* Loglama ucun alet istifadesi (Onemli hesab etmirem)
+* Loglama ucun alet istifadesi (Kicik proyektde önemli hesab etmirem)
 * Diger proyekdeki updateble field meselesine bax ve tetbit et
 
 
@@ -77,6 +77,9 @@
 * singnalR (Anliq aktiv olan userler ucun ui)
 
 * Word Document ile işləyə bilmək üçün OpenXML confiqurasiyasi
+
+* Admin Template (tabler) əlavə et. 
+    * AdminPartial və TeacherPartial əlavə et.
 
 
 

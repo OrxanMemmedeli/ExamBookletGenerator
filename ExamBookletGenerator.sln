@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TodoFile.txt = TodoFile.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EBC.Data", "EBC.Data\EBC.Data.csproj", "{C1C0A9A3-1336-4104-86C6-0E9403EB0DF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EBC.Data", "EBC.Data\EBC.Data.csproj", "{C1C0A9A3-1336-4104-86C6-0E9403EB0DF0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdminTemplateDemo", "AdminTemplateDemo", "{5EFD0CCD-5A75-4420-A18D-7EFE1EB52882}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0B3CBCFE-A95B-4FF9-9C9C-5BBD03E4293F} = {AAA99B20-48EE-4D23-A55D-5111A2212BC8}
 		{C1C0A9A3-1336-4104-86C6-0E9403EB0DF0} = {AAA99B20-48EE-4D23-A55D-5111A2212BC8}
+		{5EFD0CCD-5A75-4420-A18D-7EFE1EB52882} = {801CC820-CA17-464A-9CDD-FC669A79F579}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4C615DCA-87D8-4A25-8CA1-C68245F34097}
