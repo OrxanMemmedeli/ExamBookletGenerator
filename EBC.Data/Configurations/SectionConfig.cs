@@ -15,5 +15,8 @@ public class SectionConfig : BaseEntityConfig<Section, Guid>
             .WithMany(x => x.Sections)
             .HasForeignKey(x => x.SubjectId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => x.SubjectId);
+
     }
 }

@@ -20,5 +20,9 @@ public class SubjectParameterConfig : BaseEntityConfig<SubjectParameter, Guid>
             .WithMany(x => x.SubjectParameters)
             .HasForeignKey(x => x.ExamParameterId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => x.SubjectId);
+        builder.HasIndex(x => x.ExamParameterId);
+
     }
 }

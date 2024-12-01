@@ -16,5 +16,11 @@ public class CompanyConfig : BaseEntityConfig<Company, Guid>
             .HasForeignKey<PaymentSummary>(x => x.CompanyId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => x.Code)
+            .IsUnique();
+
+        builder.HasIndex(x => x.PaymentSummaryId);
+
     }
 }

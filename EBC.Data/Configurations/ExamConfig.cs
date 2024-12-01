@@ -21,5 +21,9 @@ public class ExamConfig : BaseEntityConfig<Exam, Guid>
             .HasForeignKey(x => x.ExamParameterId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(x => x.GradeId);
+        builder.HasIndex(x => x.ExamParameterId);
+
+
     }
 }

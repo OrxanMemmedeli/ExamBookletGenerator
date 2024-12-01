@@ -4,17 +4,16 @@ using EBC.Data.Contexts;
 using ExamBookletGenerator.Hubs;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ServiceOptions.Configure(
-    useRateLimiting: true,
-    useHangfire: true,
-    useWatchDog: true,
-    useHealthChecks: true,
-    useMiniProfiler: true,
-    useBackgroundService: true,
+    useRateLimiting: false,
+    useHangfire: false,
+    useWatchDog: false,
+    useHealthChecks: false,
+    useMiniProfiler: false,
+    useBackgroundService: false,
     useAuthenticationService: false,
     useDefaultCors: false
 );

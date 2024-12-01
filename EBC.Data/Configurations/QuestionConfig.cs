@@ -46,5 +46,13 @@ public class QuestionConfig : BaseEntityConfig<Question, Guid>
             .HasForeignKey(x => x.AcademicYearId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(x => x.SubjectId);
+        builder.HasIndex(x => x.SectionId);
+        builder.HasIndex(x => x.QuestionTypeId);
+        builder.HasIndex(x => x.QuestionLevelId);
+        builder.HasIndex(x => x.GradeId);
+        builder.HasIndex(x => x.TextId);
+        builder.HasIndex(x => x.AcademicYearId);
+
     }
 }

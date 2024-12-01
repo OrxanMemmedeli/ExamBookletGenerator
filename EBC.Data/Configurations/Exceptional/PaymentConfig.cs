@@ -1,12 +1,12 @@
-using EBC.Data.Entities.ExceptionalEntities;
+using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EBC.Data.Configurations.Exceptional;
 
-public class PaymentConfig : IEntityTypeConfiguration<Payment>
+public class PaymentConfig : IEntityTypeConfiguration<PaymentOrDebt>
 {
-    public void Configure(EntityTypeBuilder<Payment> builder)
+    public void Configure(EntityTypeBuilder<PaymentOrDebt> builder)
     {
         builder.HasOne(x => x.Company)
             .WithMany(x => x.Payments)

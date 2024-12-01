@@ -36,5 +36,12 @@ public class BookletConfig : BaseEntityConfig<Booklet, Guid>
             .HasForeignKey(x => x.AcademicYearId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(x => x.GradeId);
+        builder.HasIndex(x => x.GroupId);
+        builder.HasIndex(x => x.VariantId);
+        builder.HasIndex(x => x.ExamId);
+        builder.HasIndex(x => x.AcademicYearId);
+
+
     }
 }

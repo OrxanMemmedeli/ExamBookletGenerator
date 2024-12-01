@@ -3,6 +3,11 @@
 * Data Layerdeki Entiti-ler ucun Repositoryler elave edilmelidir
     * Repolardan sonra Login methodundaki Company Id meselesine bax (AppUserRepo-dan ceksin melumati)
 
+* FluentAPI istifadə edərək Modellər üçün məhdudiyyətlər təyin et
+
+* DocumentTemplate Service ilə word sənədə məlumat yazan zaman şəkil göndərmənidə təmin et. 
+
+* Sənəd save edərkən Base64 Formatında save etmek lazımdır. Yada Byte[] kimi 
 
 --------------------------   Belke   --------------------------
 
@@ -80,6 +85,8 @@
 
 * Admin Template (tabler) əlavə et. 
     * AdminPartial və TeacherPartial əlavə et.
+
+* Referans hisseler ucun Index yaradilmalidirmi? 
 
 
 

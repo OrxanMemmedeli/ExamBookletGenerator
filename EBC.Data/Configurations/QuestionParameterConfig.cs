@@ -21,5 +21,9 @@ public class QuestionParameterConfig : BaseEntityConfig<QuestionParameter, Guid>
             .HasForeignKey(x => x.SubjectParameterId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(x => x.QuestionTypeId);
+        builder.HasIndex(x => x.SubjectParameterId);
+
+
     }
 }

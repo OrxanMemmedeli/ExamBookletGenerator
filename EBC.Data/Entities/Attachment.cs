@@ -16,6 +16,8 @@ public class Attachment : BaseEntity<Guid>, IAuditable
     public string FileExtention { get; set; }
     public string FilePath { get; set; }
     public string? ContentType { get; set; }
+    public byte[] Bytes { get; set; }
+    public string Base64 { get; set; }
 
     public ICollection<QuestionAttahment> QuestionAttahments { get; set; }
 

@@ -9,7 +9,17 @@ public class QuestionAttahmentConfig : IEntityTypeConfiguration<QuestionAttahmen
     public void Configure(EntityTypeBuilder<QuestionAttahment> builder)
     {
         builder.HasKey(x => new { x.QuestionId, x.AttachmentId });
-        builder.HasOne(x => x.Question).WithMany(x => x.QuestionAttahments).HasForeignKey(x => x.QuestionId);
-        builder.HasOne(x => x.Attachment).WithMany(x => x.QuestionAttahments).HasForeignKey(x => x.AttachmentId);
+
+        builder.HasOne(x => x.Question)
+            .WithMany(x => x.QuestionAttahments)
+            .HasForeignKey(x => x.QuestionId);
+
+        builder.HasOne(x => x.Attachment)
+            .WithMany(x => x.QuestionAttahments)
+            .HasForeignKey(x => x.AttachmentId);
+
+        builder.HasIndex(x => x.QuestionId);
+        builder.HasIndex(x => x.AttachmentId);
+        builder.HasIndex(x => new { x.QuestionId, x.AttachmentId });
     }
 }

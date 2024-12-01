@@ -1,6 +1,6 @@
 using EBC.Core.Models.Commons;
 
-namespace EBC.Data.DTOs.Payment;
+namespace EBC.Data.DTOs.PaymentOrDebt;
 
 public class PaymentCreateDTO : BaseEntityCreateDTO
 {

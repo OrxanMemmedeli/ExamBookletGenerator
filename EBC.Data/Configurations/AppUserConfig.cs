@@ -16,6 +16,7 @@ public class AppUserConfig : BaseEntityConfig<AppUser, Guid>
             .HasForeignKey(x => x.UserTypeId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(x => x.UserTypeId);
 
         #region ConfigureField
 
@@ -88,5 +89,7 @@ public class AppUserConfig : BaseEntityConfig<AppUser, Guid>
             .WithOne(navigationName)
             .HasForeignKey(foreignKeyName)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(foreignKeyName);
     }
 }

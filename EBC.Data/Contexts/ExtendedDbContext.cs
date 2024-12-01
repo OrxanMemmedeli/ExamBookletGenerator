@@ -1,45 +1,43 @@
-﻿using EBC.Core.Entities;
-using EBC.Core.Entities.Common;
+﻿using EBC.Core.Entities.Common;
 using EBC.Core.Models.Context;
 using EBC.Data.Entities;
 using EBC.Data.Entities.CombineEntities;
-using EBC.Data.Entities.ExceptionalEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EBC.Data.Contexts;
 
 public class ExtendedDbContext : BaseDbContext
 {
-	public ExtendedDbContext() : base() {}
-	public ExtendedDbContext(DbContextOptions<BaseDbContext> options) : base(options) { }
+    public ExtendedDbContext() : base() { }
+    public ExtendedDbContext(DbContextOptions<BaseDbContext> options) : base(options) { }
 
 
     #region Base Entities With User
     public DbSet<AcademicYear> AcademicYears { get; set; }
+    public DbSet<AppUser> Users { get; set; }
+    public DbSet<Attachment> Attachments { get; set; }
+    public DbSet<AuthenticationHistory> AuthenticationHistories { get; set; }
     public DbSet<Booklet> Booklets { get; set; }
+    public DbSet<Company> Companies { get; set; }
     public DbSet<Exam> Exams { get; set; }
     public DbSet<ExamParameter> ExamParameters { get; set; }
     public DbSet<Grade> Grades { get; set; }
     public DbSet<Group> Groups { get; set; }
+    public DbSet<PaymentOrDebt> PaymentOrDebts { get; set; }
+    public DbSet<PaymentSummary> PaymentSummaries { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<QuestionLevel> QuestionLevels { get; set; }
     public DbSet<QuestionParameter> QuestionParameters { get; set; }
     public DbSet<QuestionType> QuestionTypes { get; set; }
     public DbSet<Response> Responses { get; set; }
     public DbSet<Section> Sections { get; set; }
+    public DbSet<SendingEmail> SendingEmails{ get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<SubjectParameter> SubjectParameters { get; set; }
     public DbSet<Text> Texts { get; set; }
+    public DbSet<UserType> UserTypes { get; set; }
     public DbSet<Variant> Variants { get; set; }
-    public DbSet<Attachment> Attachments { get; set; }
     #endregion
-
-
-
-    #region Simple Entities
-    public DbSet<Payment> Payments { get; set; }
-    #endregion
-
 
 
     #region Combination Entities

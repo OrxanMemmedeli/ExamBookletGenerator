@@ -30,5 +30,11 @@ public class ResponseConig : BaseEntityConfig<Response, Guid>
             .WithMany(x => x.Responses)
             .HasForeignKey(x => x.AcademicYearId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => x.SubjectId);
+        builder.HasIndex(x => x.QuestionId);
+        builder.HasIndex(x => x.QuestionTypeId);
+        builder.HasIndex(x => x.AcademicYearId);
+
     }
 }

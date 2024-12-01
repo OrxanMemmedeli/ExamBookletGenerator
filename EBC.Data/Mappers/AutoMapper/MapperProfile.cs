@@ -7,7 +7,6 @@ using EBC.Data.DTOs.Exam;
 using EBC.Data.DTOs.ExamParameter;
 using EBC.Data.DTOs.Grade;
 using EBC.Data.DTOs.Group;
-using EBC.Data.DTOs.Payment;
 using EBC.Data.DTOs.PaymentSummary;
 using EBC.Data.DTOs.Question;
 using EBC.Data.DTOs.QuestionLevel;
@@ -20,7 +19,6 @@ using EBC.Data.DTOs.Text;
 using EBC.Data.DTOs.UserType;
 using EBC.Data.DTOs.Variant;
 using EBC.Data.Entities;
-using EBC.Data.Entities.ExceptionalEntities;
 
 namespace EBC.Data.Mappers.AutoMapper;
 
@@ -111,7 +109,7 @@ public class MapperProfile : Profile
 
 
         #region PaymentProfile
-        CreateMap<Payment, PaymentCreateDTO>().ReverseMap();
+        CreateMap<PaymentOrDebt, PaymentSummaryCreateDTO>().ReverseMap();
         #endregion
 
 
