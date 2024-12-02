@@ -189,6 +189,17 @@ public class Result<T> : Result
     }
 
     /// <summary>
+    /// Nəticə və xəta mesajı ilə generik uğursuz nəticə yaratmaq üçün metod.
+    /// </summary>
+    public static Result<T> Failure(T data, string failureMessage)
+    {
+        var result = new Result<T> { Data = data };
+        Failure(result, failureMessage);
+        return result;
+    }
+
+
+    /// <summary>
     /// Uğurlu nəticə yaratmaq üçün məlumat ilə birlikdə istifadə olunur.
     /// </summary>
     public static Result<T> Success(T data)
@@ -197,6 +208,7 @@ public class Result<T> : Result
         Succeed(result);
         return result;
     }
+
 
     public static Result<T> ExecuteWithHandling<T>(Func<Result<T>> func)
     {

@@ -1,5 +1,4 @@
-﻿using AccountManagerSystem.Repositories.Abstract;
-using EBC.Core.Entities.Identity;
+﻿using EBC.Core.Entities.Identity;
 
 namespace EBC.Core.Repositories.Abstract;
 

@@ -1,10 +1,10 @@
-﻿using AccountManagerSystem.Repositories.Abstract;
-using AutoMapper;
+﻿using AutoMapper;
 using EBC.Core.Constants;
 using EBC.Core.CustomFilter.WorkFilter.Core;
 using EBC.Core.Entities.Common;
 using EBC.Core.Models.FilterModels.Common;
 using EBC.Core.Models.ResultModel;
+using EBC.Core.Repositories.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using X.PagedList;

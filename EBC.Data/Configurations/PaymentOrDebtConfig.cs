@@ -17,6 +17,6 @@ public class PaymentOrDebtConfig : BaseEntityConfig<PaymentOrDebt, Guid>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => x.CompanyId);
-
+        builder.HasIndex(x => x.PaymentType);
     }
 }

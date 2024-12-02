@@ -1,11 +1,8 @@
-﻿using EBC.Core.Entities.Common;
-using EBC.Core.Repositories.Abstract;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace AccountManagerSystem.Repositories.Abstract;
+namespace EBC.Core.Repositories.Abstract;
 
-public interface IGenericRepository<TEntity> : IGenericRepositoryWithoutBase<TEntity> 
+public interface IGenericRepository<TEntity> : IGenericRepositoryWithoutBase<TEntity>
     where TEntity : class
 {
     // Soft Delete Methods

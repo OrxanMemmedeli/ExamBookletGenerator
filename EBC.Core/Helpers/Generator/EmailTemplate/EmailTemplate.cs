@@ -52,7 +52,16 @@ public class EmailTemplate
                     <h1>{1}</h1>
                     <p>Hörmətli <span class=""highlight"">[{2}]</span>,</p>
                     <p>{3}</p>
-                    <p>Hörmətlə,<br/>[{4}]</p>
+                    <p>
+                        Əgər hər hansı çətinliklə üzləşsəniz, bizimlə əlaqə saxlayın. <br/><br/>
+                        Hörmətlə,
+                        <br/>[{4}] komandası
+                    </p>
+
+                    <p>
+                        Bu mesaj avtomatik olaraq göndərilib, cavablandırmayın. Əlavə məlumat üçün bizimlə əlaqə saxlayın: <br/> 
+                        E-poçt: memmedeli.orxan.om@gmail.com | Telefon: +994 55 821 61 23
+                    </p>
                 </div>
             </body>
             </html>";

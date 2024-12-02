@@ -6,6 +6,7 @@ public static class ExceptionMessage
     public const string ErrorOcurredByEcription = "Şifrələmə və ya deşifrələmə əməliyatı zamanı xəta baş verdi!";
     public const string NotFound = "Məlumat tapılmadı";
     public const string IsNull = "Məlumat boşdur";
+    public const string AnErrorWhenSave = "Məlumat yadda saxlanılmadı";
     public const string NotSupported = "{0} action is not supported for {1}";
     public const string UniqueUser = "İstifadəçi adı mövcuddur";
     public const string HaveDebt = "'{0}' müəssisəsinin '{1}' ₼ borcu var. Borc bağlanmadan abonelik dayandırıla bilməz";

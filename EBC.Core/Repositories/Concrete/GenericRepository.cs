@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Threading;
-using AccountManagerSystem.Repositories.Abstract;
-using EBC.Core.Caching.Concrete;
+﻿using EBC.Core.Caching.Concrete;
 using EBC.Core.Entities.Common;
 using EBC.Core.Repositories.Abstract;
-using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace EBC.Core.Repositories.Concrete;
 
@@ -408,7 +404,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IGenericR
     /// <param name="noTracking">No-tracking rejimi (default olaraq true).</param>
     /// <param name="includes">Daxil ediləcək əlaqəli entity-lər.</param>
     /// <returns>Entity və ya null.</returns>
-    public virtual async Task<TEntity> GetByIdAsync(Guid id, bool noTracking = true, params Expression<Func<TEntity, object?>>[] includes)
+    public virtual async Task<TEntity> GetByIdAsync(Guid id, bool noTracking = true, params Expression<Func<TEntity, object>>[] includes)
     {
         var foundEntity = await entity.FindAsync(id);
 

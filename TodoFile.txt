@@ -2,10 +2,11 @@
 
 * Data Layerdeki Entiti-ler ucun Repositoryler elave edilmelidir
     * Repolardan sonra Login methodundaki Company Id meselesine bax (AppUserRepo-dan ceksin melumati)
+    * Payment or Debt type index yarat
+
+* Valifdation hissesi AMS bax
 
 * FluentAPI istifadə edərək Modellər üçün məhdudiyyətlər təyin et
-
-* DocumentTemplate Service ilə word sənədə məlumat yazan zaman şəkil göndərmənidə təmin et. 
 
 * Sənəd save edərkən Base64 Formatında save etmek lazımdır. Yada Byte[] kimi 
 
@@ -16,7 +17,7 @@
 
 
 
---------------------------HAZIRLANMIS--------------------------
+--------------------------HAZIRLANMIS-------------------------- 
 * alinsa Core hisseye configuration yaz
 * Repositry ucun global yaz hamisini alsin avtomatik. Amma unutma ki Core ve App seviyyesi olacaq
     * Butun Root deyerlerini tapan methoduda yaz
@@ -87,6 +88,8 @@
     * AdminPartial və TeacherPartial əlavə et.
 
 * Referans hisseler ucun Index yaradilmalidirmi? 
+
+* DocumentTemplate Service ilə word sənədə məlumat yazan zaman şəkil göndərmənidə təmin et. 
 
 
 
