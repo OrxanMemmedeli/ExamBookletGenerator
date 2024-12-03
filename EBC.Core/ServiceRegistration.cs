@@ -5,6 +5,8 @@ using EBC.Core.Caching.Concrete;
 using EBC.Core.Constants;
 using EBC.Core.Helpers.Authentication;
 using EBC.Core.Helpers.StartupFinders;
+using EBC.Core.Jobs.Common;
+using EBC.Core.Jobs.Models;
 using EBC.Core.Middlewares;
 using EBC.Core.Models;
 using EBC.Core.Repositories.Abstract;
@@ -37,7 +39,10 @@ public static class ServiceRegistration
     /// </summary>
     /// <param name="services">Service kolleksiyası.</param>
     /// <returns>Genişlənmiş service kolleksiyası.</returns>
-    public static IServiceCollection AddCoreLayerServices(this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
+    public static IServiceCollection AddCoreLayerServices(
+        this IServiceCollection services, 
+        IConfiguration configuration, 
+        bool isDevelopment)
     {
         string connectionString = ConnectionStringFinder.GetConnectionString(configuration);
 
@@ -247,11 +252,20 @@ public static class ServiceRegistration
         if (!ServiceOptions.UseHangfire)
             return;
 
+        services.Configure<JobTriggersOptions>(configuration.GetSection("JobTriggers"));
+
         services.AddHangfire(config =>
         {
             config.UseSqlServerStorage(ConnectionStringFinder.GetConnectionString(configuration));
         });
         services.AddHangfireServer();
+
+
+        // IServiceProvider yaradılır
+        var serviceProvider = services.BuildServiceProvider();
+
+        // Sistemdəki işləri qeydiyyatdan keçirir
+        JobScheduler.RegisterJobs(serviceProvider);
     }
 
     private static void RegisterWatchDog(IServiceCollection services, IConfiguration configuration)
@@ -270,7 +284,7 @@ public static class ServiceRegistration
 
     private static void RegisterBackgroundService(IServiceCollection services, IConfiguration configuration)
     {
-        if (!ServiceOptions.UseWatchDog)
+        if (!ServiceOptions.UseBackgroundService)
             return;
 
         services.AddSingleton<IBackgroundTaskQueue<string>>(provider => new BackgroundTaskQueue<string>(configuration));

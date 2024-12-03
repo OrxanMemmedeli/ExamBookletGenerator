@@ -1,4 +1,5 @@
-﻿using EBC.Core;
+﻿using EBC.Business;
+using EBC.Core;
 using EBC.Core.Helpers.StartupFinders;
 using EBC.Data.Contexts;
 using ExamBookletGenerator.Hubs;
@@ -36,12 +37,12 @@ builder.Services.AddDbContext<DbContext, ExtendedDbContext>(conf =>
         option.CommandTimeout(60); // Sorğunun maksimum icra müddətini 60 saniyə olaraq təyin edir
 
     });
-
 });
 
 
 //Layers Services
 builder.Services.AddCoreLayerServices(configuration: builder.Configuration, isDevelopment: builder.Environment.IsDevelopment());
+builder.Services.AddBusinessLayerServices(configuration: builder.Configuration);
 
 builder.Services.AddSignalR();
 

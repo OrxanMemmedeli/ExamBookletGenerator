@@ -30,7 +30,7 @@ public class QueueHostedService : BackgroundService
             var workItem = await _queue.DequeueAsync(stoppingToken);
 
             // İşin icrası (məsələn, e-poçt göndərmə və ya məlumat yeniləmə)
-            await Task.Delay(1000); // işin icra müddəti
+            await Task.Delay(500); // işin icra müddəti
         }
     }
 }

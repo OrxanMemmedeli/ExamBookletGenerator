@@ -2,6 +2,7 @@
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using EBC.Core.Constants;
+using EBC.Core.Models.ResultModel;
 
 
 namespace EBC.Core.Services.EmailService;
@@ -40,7 +41,7 @@ public class GmailService : IEmailService
     /// <param name="body">E-poçtun məzmunu.</param>
     /// <param name="isHtml">E-poçt məzmununun HTML formatında olub olmadığını göstərir.</param>
     /// <returns>Asinxron əməliyyatın nəticəsi.</returns>
-    public async Task SendEmailAsync(string to, string subject, string body, bool isHtml = false)
+    public async Task<Result> SendEmailAsync(string to, string subject, string body, bool isHtml = false)
     {
         var mimeMessage = new MimeMessage();
 
@@ -62,5 +63,7 @@ public class GmailService : IEmailService
         await smtpClient.AuthenticateAsync(_fromAddress, _password);
         await smtpClient.SendAsync(mimeMessage);
         await smtpClient.DisconnectAsync(true);
+
+        return Result<Task>.Success();
     }
 }
