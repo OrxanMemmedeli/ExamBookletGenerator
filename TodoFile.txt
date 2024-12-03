@@ -1,12 +1,5 @@
 ﻿--------------------------  HAZIRLA  --------------------------
 
-* Data Layerdeki Entiti-ler ucun Repositoryler elave edilmelidir
-    * Repolardan sonra Login methodundaki Company Id meselesine bax (AppUserRepo-dan ceksin melumati)
-    * Payment or Debt type index yarat
-
-* Valifdation hissesi AMS bax
-
-* FluentAPI istifadə edərək Modellər üçün məhdudiyyətlər təyin et
 
 * Sənəd save edərkən Base64 Formatında save etmek lazımdır. Yada Byte[] kimi 
 
@@ -15,6 +8,7 @@
 * Loglama ucun alet istifadesi (Kicik proyektde önemli hesab etmirem)
 * Diger proyekdeki updateble field meselesine bax ve tetbit et
 
+* FluentAPI istifadə edərək Modellər üçün məhdudiyyətlər təyin et (Confiquration hissesinde)
 
 
 --------------------------HAZIRLANMIS-------------------------- 
@@ -81,16 +75,16 @@
     * deyissen validayion hissesinde nezere almaq lazimdir
 * Default Cors ayarlari elave et (optional)
 * singnalR (Anliq aktiv olan userler ucun ui)
-
 * Word Document ile işləyə bilmək üçün OpenXML confiqurasiyasi
-
 * Admin Template (tabler) əlavə et. 
     * AdminPartial və TeacherPartial əlavə et.
-
 * Referans hisseler ucun Index yaradilmalidirmi? 
-
 * DocumentTemplate Service ilə word sənədə məlumat yazan zaman şəkil göndərmənidə təmin et. 
-
+* Data Layerdeki Entiti-ler ucun Repositoryler elave edilmelidir
+    * Repolardan sonra Login methodundaki Company Id meselesine bax (AppUserRepo-dan ceksin melumati)
+    * Payment or Debt type index yarat
+    * Role ',' simvolu olmamalidir.
+    * Valifdation hissesi AMS bax
 
 
 

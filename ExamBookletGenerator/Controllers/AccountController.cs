@@ -4,6 +4,7 @@ using EBC.Core.Models;
 using EBC.Core.Models.Dtos.Identities.User;
 using EBC.Core.Models.ResultModel;
 using EBC.Core.Repositories.Abstract;
+using EBC.Data.Repositories.Abstract;
 using ExamBookletGenerator.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -20,15 +21,16 @@ namespace ExamBookletGenerator.Controllers;
 [AllowRoleFilter]
 public class AccountController : Controller
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IAppUserRepository _appUserRepository;
     private readonly GoogleReCaptureConfigModel _googleConfig;
     private readonly UserSessionManagerService _userSessionManagerService;
+
     public AccountController(
-        IUserRepository userRepository, 
-        IOptions<GoogleReCaptureConfigModel> googleConfig, 
+        IAppUserRepository appUserRepository,
+        IOptions<GoogleReCaptureConfigModel> googleConfig,
         UserSessionManagerService userSessionManagerService)
     {
-        _userRepository = userRepository;
+        _appUserRepository = appUserRepository;
         _googleConfig = googleConfig.Value;
         _userSessionManagerService = userSessionManagerService;
     }
@@ -48,41 +50,24 @@ public class AccountController : Controller
 
         if (ModelState.IsValid && isValid)
         {
-            Result<UserLoginResponseDTO> result = await _userRepository.GetLoginInfo(login.UserName, login.Password);
+            (Result<UserLoginResponseDTO> result, List<Claim> claims) = await _appUserRepository.GetLoginInfo(login.UserName, login.Password);
 
-            if (result.IsSuccess)
+            if (result.IsSuccess && claims.Any())
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(CustomClaimTypes.UserId, result.Data.UserId.ToString()),
-                    new Claim(CustomClaimTypes.IsAdmin, result.Data.IsAdmin.ToString()),
-                    new Claim(CustomClaimTypes.IsManager, result.Data.IsManager.ToString()),
-                    new Claim(CustomClaimTypes.UserName, result.Data.UserName),
-                    new Claim(CustomClaimTypes.FirstName, result.Data.FirstName),
-                    new Claim(CustomClaimTypes.LastName, result.Data.LastName),
-                    new Claim(CustomClaimTypes.FullName, result.Data.FullName),
-                    new Claim(CustomClaimTypes.LoginTime, result.Data.LoginTime.ToString()),
-
-                    new Claim(CustomClaimTypes.Roles, result.Data.Roles),
-                    new Claim(CustomClaimTypes.OrganizationAddress, result.Data.Organizations),
-
-                    new Claim(CustomClaimTypes.CompanyId, result.Data.CompanyId.ToString())
-                };
-
                 var useridentity = new ClaimsIdentity(claims, "Login");
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(useridentity);
 
                 await HttpContext.SignInAsync(claimsPrincipal);
 
-                if (!string.IsNullOrEmpty(returnUrl))
-                    return Redirect(returnUrl);
-                else
-                    return Redirect("/Admin");
+                return !string.IsNullOrEmpty(returnUrl)
+                    ? Redirect(returnUrl)
+                    : Redirect("/Admin");
             }
         }
         TempData["LoginMessage"] = "Uğursuz əməliyat";
         return View();
     }
+
 
 
 

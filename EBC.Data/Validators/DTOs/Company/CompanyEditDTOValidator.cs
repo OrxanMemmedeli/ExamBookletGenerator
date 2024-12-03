@@ -10,9 +10,6 @@ public class CompanyEditDTOValidator : BaseEntityEditDTOValidator<CompanyEditDTO
     public CompanyEditDTOValidator() : base()
     {
         RuleFor(x => x.Name)
-            .MaximumLength(50).WithMessage(string.Format(ValidationMessage.MaximumLength, 50));
-
-        RuleFor(x => x.Name)
             .MinimumLength(4).WithMessage(string.Format(ValidationMessage.MinimumLength, 4))
             .MaximumLength(250).WithMessage(string.Format(ValidationMessage.MaximumLength, 250));
 

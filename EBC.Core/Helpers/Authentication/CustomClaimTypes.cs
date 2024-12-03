@@ -11,6 +11,6 @@ public static class CustomClaimTypes
     public const string FullName = "https://orxanmemmedeli.github.io/fullName";
     public const string Roles = "https://orxanmemmedeli.github.io/roles";
     public const string OrganizationAddress = "https://orxanmemmedeli.github.io/organizationAddress";
-    public const string CompanyId = "https://orxanmemmedeli.github.io/companyId";
+    public const string CompanyIds = "https://orxanmemmedeli.github.io/companyIds";
     public const string LoginTime = "https://orxanmemmedeli.github.io/logintime";
 }

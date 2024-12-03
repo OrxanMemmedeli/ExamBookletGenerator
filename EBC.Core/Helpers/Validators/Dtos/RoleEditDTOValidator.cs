@@ -10,6 +10,7 @@ public class RoleEditDTOValidator : BaseEntityEditDTOValidator<RoleEditDTO>
     public RoleEditDTOValidator() : base()
     {
         RuleFor(x => x.Name)
-            .MaximumLength(50).WithMessage(String.Format(ValidationMessage.MaximumLength, 50));
+            .MaximumLength(50).WithMessage(String.Format(ValidationMessage.MaximumLength, 50))
+            .Must(name => !name.Contains(',')).WithMessage(ValidationMessage.NotCanContainsComma);
     }
 }

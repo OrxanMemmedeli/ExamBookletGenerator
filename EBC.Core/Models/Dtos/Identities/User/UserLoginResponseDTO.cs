@@ -2,17 +2,17 @@
 
 public class UserLoginResponseDTO
 {
-    public Guid UserId { get; set; }
-    public bool IsAdmin { get; set; }
-    public bool IsManager { get; set; }
-    public string UserName { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string FullName { get; set; }
+    public required Guid UserId { get; set; }
+    public required bool IsAdmin { get; set; }
+    public required bool IsManager { get; set; }
+    public required string UserName { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required string FullName { get; set; }
 
-    public string Roles { get; set; }
-    public string Organizations { get; set; }
+    public required string Roles { get; set; }
+    public required string Organizations { get; set; }
+    public required string CompanyIds { get; set; }
 
-    public DateTime LoginTime { get; set; }
-    public Guid CompanyId { get; set; }
+    public required DateTime LoginTime { get; set; }
 }

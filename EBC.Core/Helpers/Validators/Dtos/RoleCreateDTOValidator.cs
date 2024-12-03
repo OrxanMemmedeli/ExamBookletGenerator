@@ -11,6 +11,7 @@ public class RoleCreateDTOValidator : BaseEntityCreateDTOValidator<RoleCreateDTO
     {
         // Xüsusi qayda: Maksimum uzunluq
         RuleFor(x => x.Name)
-            .MaximumLength(50).WithMessage(String.Format(ValidationMessage.MaximumLength, 50));
+            .MaximumLength(50).WithMessage(String.Format(ValidationMessage.MaximumLength, 50))
+            .Must(name => !name.Contains(',')).WithMessage(ValidationMessage.NotCanContainsComma);
     }
 }

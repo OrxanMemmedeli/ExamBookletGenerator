@@ -21,10 +21,11 @@ public static class ValidationMessage
     public const string InclusiveBetween = "qiymət aralığı {0} - {1} kimi olmalıdır";
     public const string WrongGuidFormat = "xətalı Guid formatı";
     public const string DateTimeMinValue = "Daxil edilmiş tarix cari tarixdən kiçik ola bilməz";
-    public const string GreaterThanOrEqualTo = "Bu sahə {1} və ya daha böyük dəyər olmalıdır";
+    public const string GreaterThanOrEqualTo = "Bu sahə {0} və ya daha böyük dəyər olmalıdır";
     public const string ContainsTextForTextTitle = "Mətn Başlığında mütləq formada \"{0} – {1}\" ifadəsi yer almalıdır. (Sual nömrələrini avtomatik vermək üçün)";
     public const string WrongLinkAdress = "xətalı link ünvanı";
 
     public const string PaymentGreaterFromDebt = "Ödəniş məbləği borcdan az ola bilməz. {0} tarixi üçün minimal ödəniş məbləği {1} olmalıdır.";
+    public const string NotCanContainsComma = "Vergül simvolu yazıla bilməz";
 
 }
