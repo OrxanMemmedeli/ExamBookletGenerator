@@ -27,7 +27,7 @@ public static class CurrentUser
     public static string Roles => User?.FindFirst(CustomClaimTypes.Roles)?.Value ?? string.Empty;
     public static string OrganizationAddress => User?.FindFirst(CustomClaimTypes.OrganizationAddress)?.Value ?? string.Empty;
     public static DateTime LoginTime => DateTime.Parse(User?.FindFirst(CustomClaimTypes.LoginTime)?.Value ?? default(DateTime).ToString());
-    public static Guid CompanyId => Guid.Parse(User?.FindFirst(CustomClaimTypes.CompanyId)?.Value ?? Guid.Empty.ToString());
+    public static Guid CompanyId => Guid.Parse(User?.FindFirst(CustomClaimTypes.CompanyIds)?.Value ?? Guid.Empty.ToString());
 
     public static void RegisterUserSession()
     {

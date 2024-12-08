@@ -2,6 +2,7 @@
 using EBC.Core.Constants;
 using EBC.Core.CustomFilter.WorkFilter.Core;
 using EBC.Core.Entities.Common;
+using EBC.Core.Models.Commons;
 using EBC.Core.Models.FilterModels.Common;
 using EBC.Core.Models.ResultModel;
 using EBC.Core.Repositories.Abstract;
@@ -14,10 +15,10 @@ namespace EBC.Core.BaseContents.Controllers;
 
 public class BaseController<TEntity, TDTO, TCreateDTO, TEditDTO, TFilterModel> : Controller
     where TEntity : BaseEntity<Guid>, new()
-        where TDTO : class, new()
-        where TCreateDTO : class
-        where TEditDTO : class
-        where TFilterModel : BaseFilterModel
+        where TDTO : BaseEntityViewDTO, new()
+        where TCreateDTO : BaseEntityCreateDTO, new()
+        where TEditDTO : BaseEntityEditDTO, new()
+        where TFilterModel : BaseFilterModel, new()
 {
     private readonly IGenericRepository<TEntity> _repository;
     private readonly IMapper _mapper;

@@ -46,9 +46,8 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(LoginViewModel login, string returnUrl)
     {
 
-        var isValid = IsReCaptchValidV3(login.captcha);
-
-        if (ModelState.IsValid && isValid)
+        bool isCaptchaValid = await IsReCaptchValidV3Async(login.captcha);
+        if (ModelState.IsValid && isCaptchaValid)
         {
             (Result<UserLoginResponseDTO> result, List<Claim> claims) = await _appUserRepository.GetLoginInfo(login.UserName, login.Password);
 
@@ -83,24 +82,29 @@ public class AccountController : Controller
         return RedirectToAction("Login");
     }
 
-    private bool IsReCaptchValidV3(string captchaResponse)
+    private async Task<bool> IsReCaptchValidV3Async(string captchaResponse)
     {
-        var result = false;
-        var secretKey = _googleConfig.Secret;
-        var apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
-        var requestUri = string.Format(apiUrl, secretKey, captchaResponse);
-        var request = (HttpWebRequest)WebRequest.Create(requestUri);
+        if (string.IsNullOrWhiteSpace(captchaResponse))
+            throw new ArgumentException("Captcha response cannot be null or empty", nameof(captchaResponse));
 
-        using (WebResponse response = request.GetResponse())
+        var secretKey = _googleConfig.Secret;
+        var apiUrl = "https://www.google.com/recaptcha/api/siteverify";
+
+        using var httpClient = new HttpClient();
+        var values = new Dictionary<string, string>
         {
-            using (StreamReader stream = new StreamReader(response.GetResponseStream()))
-            {
-                JObject jResponse = JObject.Parse(stream.ReadToEnd());
-                var isSuccess = jResponse.Value<bool>("success");
-                result = (isSuccess) ? true : false;
-            }
-        }
-        return result;
+            { "secret", secretKey },
+            { "response", captchaResponse }
+        };
+
+        var content = new FormUrlEncodedContent(values);
+        var response = await httpClient.PostAsync(apiUrl, content);
+        if (!response.IsSuccessStatusCode)
+            return false;
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        var jResponse = JObject.Parse(responseString);
+        return jResponse.Value<bool>("success");
     }
 }
 

@@ -1,6 +1,4 @@
-﻿using EBC.Core.Models.Enums;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
 
@@ -71,7 +69,7 @@ public class CsHtmlViewGenerator : ISourceGenerator
                 {
                     // Atributu namespace ilə tam şəkildə yoxlayırıq
                     var attribute = methodSymbol.GetAttributes()
-                        .FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == "ExamBookletGenerator.Attributes.AutoGenerateActionViewAttribute");
+                        .FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == "EBC.Core.Attributes.AutoGenerateActionViewAttribute");
 
                     // DTO tipini və MethodType dəyərini tapırıq
                     var dtoType = attribute?.ConstructorArguments.FirstOrDefault(arg => arg.Kind == TypedConstantKind.Type).Value as INamedTypeSymbol;
@@ -89,6 +87,12 @@ public class CsHtmlViewGenerator : ISourceGenerator
                     // Generasiya edilmiş view kontentini yaradırıq
                     string viewContent = GenerateViewContent(methodSymbol, dtoType, methodType.ToString(), areaName);
                     var fileName = $"{methodSymbol.ContainingType.Name}_{methodSymbol.Name}.cshtml";
+
+                    // Fiziki fayl yaratmaq üçün əlavə məntiq
+                    WriteViewToDisk(viewContent, fileName, areaName, methodSymbol.ContainingType.Name);
+
+
+                    // Analyzers altında görünməsi üçün əlavə edin
                     context.AddSource(fileName, SourceText.From(viewContent, Encoding.UTF8));
                 }
             }
@@ -495,5 +499,29 @@ public class CsHtmlViewGenerator : ISourceGenerator
         return inputType;
     }
     #endregion
+
+
+    private void WriteViewToDisk(string viewContent, string fileName, string areaName, string controllerName)
+    {
+        // Layihə kök qovluğunu əldə edirik
+        string projectDirectory = Directory.GetCurrentDirectory();
+
+        // `Views` qovluğu yolu
+        string viewsDirectory = string.IsNullOrWhiteSpace(areaName)
+            ? Path.Combine(projectDirectory, "Views", controllerName)
+            : Path.Combine(projectDirectory, "Areas", areaName, "Views", controllerName);
+
+        // Qovluğu yoxlayırıq, yoxdursa yaradılır
+        if (!Directory.Exists(viewsDirectory))
+        {
+            Directory.CreateDirectory(viewsDirectory);
+        }
+
+        // Fayl tam yolunu yaradırıq
+        string filePath = Path.Combine(viewsDirectory, fileName);
+
+        // Faylı yazırıq
+        File.WriteAllText(filePath, viewContent, Encoding.UTF8);
+    }
 
 }

@@ -1,6 +1,6 @@
 ﻿using EBC.Core.Models.Enums;
 
-namespace ExamBookletGenerator.Attributes;
+namespace EBC.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false)]
 public class AutoGenerateActionViewAttribute : Attribute

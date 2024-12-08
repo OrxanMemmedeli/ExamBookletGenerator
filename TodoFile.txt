@@ -1,5 +1,9 @@
 ﻿--------------------------  HAZIRLA  --------------------------
 
+* Filter Modellerin içini doldur. 
+    * Controlleri hazirla ve Avto generate tetbiq et
+
+* ViewGenerator islemir
 
 * Sənəd save edərkən Base64 Formatında save etmek lazımdır. Yada Byte[] kimi 
 
