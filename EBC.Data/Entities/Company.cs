@@ -1,5 +1,6 @@
 using EBC.Core.Entities.Common;
 using EBC.Data.Entities.CombineEntities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBC.Data.Entities;
 
@@ -33,9 +34,8 @@ public class Company : BaseEntity<Guid>
     public bool IsActive { get; set; }
     public bool IsStopSubscription { get; set; }
     public bool IsConfirm { get; set; }
-    public Guid PaymentSummaryId { get; set; }
 
-    public virtual PaymentSummary? PaymentSummary { get; set; }
+    public virtual PaymentSummary PaymentSummary { get; set; }
 
     #region Collections 
 

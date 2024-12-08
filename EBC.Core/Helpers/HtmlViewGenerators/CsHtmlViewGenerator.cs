@@ -522,6 +522,10 @@ public class CsHtmlViewGenerator : ISourceGenerator
 
         // Faylı yazırıq
         File.WriteAllText(filePath, viewContent, Encoding.UTF8);
+
+        Console.BackgroundColor = ConsoleColor.Green;
+        Console.WriteLine($"File Path: {filePath}");
+        Console.ResetColor();
     }
 
 }

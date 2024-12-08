@@ -10,7 +10,8 @@ public class PaymentSummaryConfig : BaseEntityConfig<PaymentSummary, Guid>
     {
         base.Configure(builder);
 
-        builder.HasIndex(x => x.CompanyId);
+        builder.HasIndex(x => x.CompanyId)
+            .IsUnique();
 
     }
 }

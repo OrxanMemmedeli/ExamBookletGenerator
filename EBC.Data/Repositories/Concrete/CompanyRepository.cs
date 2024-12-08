@@ -257,7 +257,6 @@ public class CompanyRepository : GenericRepository<Company>, ICompanyRepository
         company.Key = KeyGenerator.Generate(30, false);
         company.IsPenal = false;
         company.IsActive = true;
-        company.PaymentSummaryId = summaryId;
 
         _companyRepository.AddWithoutSave(company);
     }

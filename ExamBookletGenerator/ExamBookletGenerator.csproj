@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -21,6 +22,10 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Attributes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Analyzer Include="..\EBC.Core\bin\Debug\net8.0\EBC.Core.dll" />
   </ItemGroup>
 
 </Project>

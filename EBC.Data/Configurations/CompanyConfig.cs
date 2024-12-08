@@ -20,7 +20,5 @@ public class CompanyConfig : BaseEntityConfig<Company, Guid>
         builder.HasIndex(x => x.Code)
             .IsUnique();
 
-        builder.HasIndex(x => x.PaymentSummaryId);
-
     }
 }

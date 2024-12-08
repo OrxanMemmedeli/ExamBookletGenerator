@@ -5,6 +5,8 @@
 
 * ViewGenerator islemir
 
+* Migration olmur. Bax
+
 * Sənəd save edərkən Base64 Formatında save etmek lazımdır. Yada Byte[] kimi 
 
 --------------------------   Belke   --------------------------
