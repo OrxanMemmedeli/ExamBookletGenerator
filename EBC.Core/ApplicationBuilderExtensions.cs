@@ -44,18 +44,6 @@ public static class ApplicationBuilderExtensions
     }
 
 
-
-
-    #region Common
-    public static async Task AddSeedDataAsync(this IServiceProvider serviceProvider)
-    {
-        using var scope = serviceProvider.CreateScope();
-        var seedData = scope.ServiceProvider.GetRequiredService<EBC.Core.SeedData.SeedData>();
-        await seedData.WriteSeedDataAsync();
-    }
-
-    #endregion
-
     #region Optional
 
     private static void UseRateLimit(IApplicationBuilder app)

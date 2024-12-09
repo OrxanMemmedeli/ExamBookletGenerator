@@ -1,12 +1,11 @@
-﻿using EBC.Core.Entities.Identity;
-using EBC.Core.Entities;
-using Microsoft.EntityFrameworkCore;
-using EBC.Core.Helpers.StartupFinders;
-using Microsoft.Extensions.Configuration;
-using System.Reflection;
+﻿using EBC.Core.Entities;
 using EBC.Core.Entities.Common;
-using EBC.Core.Attributes.Authentication;
+using EBC.Core.Entities.Configurations.Identity;
+using EBC.Core.Entities.Identity;
 using EBC.Core.Helpers.Authentication;
+using EBC.Core.Helpers.StartupFinders;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace EBC.Core.Models.Context;
 
@@ -25,7 +24,7 @@ public abstract class BaseDbContext : DbContext
     /// Konfiqurasiya parametrləri ilə `DbContext`-i yaradır.
     /// </summary>
     /// <param name="options">DbContext üçün konfiqurasiya variantları.</param>
-    public BaseDbContext(DbContextOptions<BaseDbContext> options) : base(options) { }
+    public BaseDbContext(DbContextOptions options) : base(options) { }
 
     /// <summary>
     /// DbContext-in konfiqurasiyasını müəyyənləşdirir və `ConnectionString` istifadə edərək verilənlər bazasına qoşulmanı təmin edir.
@@ -68,7 +67,7 @@ public abstract class BaseDbContext : DbContext
 
 
     // Core layihəsindəki Entity-lər burada təyin edilir
-    public DbSet<User> Users { get; set; }
+    //public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<OrganizationAdress> OrganizationAdresses { get; set; }
@@ -83,12 +82,17 @@ public abstract class BaseDbContext : DbContext
     /// <param name="modelBuilder">Model yaratma vasitəsilə tətbiq olunan konfiqurasiya.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Assembly içərisindəki bütün IEntityTypeConfiguration interfeysindən miras alanları tətbiq edir
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
         base.OnModelCreating(modelBuilder);
+
+        AddConfigurations(modelBuilder);
     }
 
+    private static void AddConfigurations(ModelBuilder modelBuilder)
+    {
+        //modelBuilder.ApplyConfiguration(new BaseEntityConfig());
+        modelBuilder.ApplyConfiguration(new OrganizationAdressRoleConfig());
+        modelBuilder.ApplyConfiguration(new UserRoleConfig());
+    }
 
     /// <summary>
     /// Verilənlər bazasına dəyişiklikləri saxlamaq üçün metodu ləğv edir və əvvəlcə `OnBeforeSave` metodunu çağırır.

@@ -71,4 +71,50 @@ public class AppUserRepository : GenericRepository<AppUser>, IAppUserRepository
                 new Claim(CustomClaimTypes.OrganizationAddress, dto.Organizations),
                 new Claim(CustomClaimTypes.CompanyIds, dto.CompanyIds)
             };
+
+    public Task<Result> AddUser(AppUser entity)
+    {
+        if (base.entity.Any(x => x.UserName == entity.UserName))
+            return Task.FromResult<Result>(Result.Failure(ExceptionMessage.UniqueUser));
+
+        entity.Password = EncryptionService.Encrypt(EncryptionService.Encrypt(entity.Password));
+
+        base.entity.Add(entity);
+        base.SaveChanges();
+
+        return Task.FromResult<Result>(Result.Success());
+    }
+
+
+    public Task<Result> UpdateUser(Guid userId, UserEditDTO dto)
+    {
+        var user = base.entity.FirstOrDefault(x => x.Id == userId);
+
+        if (base.entity.Any(x => x.UserName == dto.UserName && x.Id != userId))
+            return Task.FromResult<Result>(Result.Failure(ExceptionMessage.UniqueUser));
+
+        user.UserName = dto.UserName;
+        user.FirstName = dto.FirstName;
+        user.LastName = dto.LastName;
+
+        base.entity.Update(user);
+        base.SaveChanges();
+
+        return Task.FromResult<Result>(Result.Success());
+    }
+
+    public Task<Result> UpdateUserPassword(UserPasswordEditDTO entity)
+    {
+        var user = base.entity.FirstOrDefault(x => x.Id == entity.Id);
+
+        if (user == null)
+            return Task.FromResult<Result>(Result.Failure(ExceptionMessage.UniqueUser));
+
+        entity.Password = EncryptionService.Decrypt(EncryptionService.Decrypt(entity.Password));
+
+        base.entity.Update(user);
+        base.SaveChanges();
+
+        return Task.FromResult<Result>(Result.Success());
+    }
 }

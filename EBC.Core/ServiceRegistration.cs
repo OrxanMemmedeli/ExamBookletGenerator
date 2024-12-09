@@ -64,9 +64,6 @@ public static class ServiceRegistration
         // WatchDog
         RegisterWatchDog(services, configuration);
 
-        // SeedData
-        services.AddScoped<EBC.Core.SeedData.SeedData>();
-
         // RateLimit
         RegisterRateLimit(services, configuration);
 

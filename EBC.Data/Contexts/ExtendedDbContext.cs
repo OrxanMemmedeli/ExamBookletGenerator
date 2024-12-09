@@ -1,20 +1,23 @@
 ﻿using EBC.Core.Entities.Common;
 using EBC.Core.Models.Context;
+using EBC.Data.Configurations;
+using EBC.Data.Configurations.CombineConfigs;
 using EBC.Data.Entities;
 using EBC.Data.Entities.CombineEntities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace EBC.Data.Contexts;
 
 public class ExtendedDbContext : BaseDbContext
 {
     public ExtendedDbContext() : base() { }
-    public ExtendedDbContext(DbContextOptions<BaseDbContext> options) : base(options) { }
+    public ExtendedDbContext(DbContextOptions<ExtendedDbContext> options) : base(options) { }
 
 
     #region Base Entities With User
     public DbSet<AcademicYear> AcademicYears { get; set; }
-    public DbSet<AppUser> Users { get; set; }
+    public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Attachment> Attachments { get; set; }
     public DbSet<AuthenticationHistory> AuthenticationHistories { get; set; }
     public DbSet<Booklet> Booklets { get; set; }
@@ -31,7 +34,7 @@ public class ExtendedDbContext : BaseDbContext
     public DbSet<QuestionType> QuestionTypes { get; set; }
     public DbSet<Response> Responses { get; set; }
     public DbSet<Section> Sections { get; set; }
-    public DbSet<SendingEmail> SendingEmails{ get; set; }
+    public DbSet<SendingEmail> SendingEmails { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<SubjectParameter> SubjectParameters { get; set; }
     public DbSet<Text> Texts { get; set; }
@@ -46,10 +49,16 @@ public class ExtendedDbContext : BaseDbContext
     #endregion
 
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        AddConfigurations(modelBuilder);
 
         var auditableEntities = typeof(BaseEntity<>).Assembly.GetTypes()
             .Where(t => typeof(IAuditable).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
@@ -80,4 +89,22 @@ public class ExtendedDbContext : BaseDbContext
         }
     }
 
+    private static void AddConfigurations(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new CompanyUserConfig());
+        modelBuilder.ApplyConfiguration(new QuestionAttahmentConfig());
+        modelBuilder.ApplyConfiguration(new AppUserConfig());
+        modelBuilder.ApplyConfiguration(new AuthenticationHistoryConfig());
+        modelBuilder.ApplyConfiguration(new BookletConfig());
+        modelBuilder.ApplyConfiguration(new CompanyConfig());
+        modelBuilder.ApplyConfiguration(new ExamConfig());
+        modelBuilder.ApplyConfiguration(new PaymentOrDebtConfig());
+        modelBuilder.ApplyConfiguration(new PaymentSummaryConfig());
+        modelBuilder.ApplyConfiguration(new QuestionConfig());
+        modelBuilder.ApplyConfiguration(new QuestionParameterConfig());
+        modelBuilder.ApplyConfiguration(new ResponseConig());
+        modelBuilder.ApplyConfiguration(new SectionConfig());
+        modelBuilder.ApplyConfiguration(new SendingEmailConfig());
+        modelBuilder.ApplyConfiguration(new SubjectParameterConfig());
+    }
 }

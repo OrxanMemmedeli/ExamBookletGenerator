@@ -2,10 +2,11 @@
 
 * Filter Modellerin içini doldur. 
     * Controlleri hazirla ve Avto generate tetbiq et
-
-* ViewGenerator islemir
+        * ViewGenerator islemir
 
 * Migration olmur. Bax
+
+* User Silindiyine gore SeedDatanin yeri deyisdi. 
 
 * Sənəd save edərkən Base64 Formatında save etmek lazımdır. Yada Byte[] kimi 
 

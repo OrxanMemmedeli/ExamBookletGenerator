@@ -1,6 +1,7 @@
 ﻿using EBC.Business;
 using EBC.Core;
 using EBC.Core.Helpers.StartupFinders;
+using EBC.Data;
 using EBC.Data.Contexts;
 using ExamBookletGenerator.Hubs;
 using Hangfire;
@@ -43,6 +44,7 @@ builder.Services.AddDbContext<DbContext, ExtendedDbContext>(conf =>
 //Layers Services
 builder.Services.AddCoreLayerServices(configuration: builder.Configuration, isDevelopment: builder.Environment.IsDevelopment());
 builder.Services.AddBusinessLayerServices(configuration: builder.Configuration);
+builder.Services.AddDataLayerServices();
 
 builder.Services.AddSignalR();
 
