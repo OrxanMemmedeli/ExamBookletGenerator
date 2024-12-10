@@ -38,7 +38,7 @@ namespace EBC.Core.Helpers.HtmlViewGenerators;
 /// 5. **Dəyişikliklərə Real Zamanlı Nəzarət**:
 ///    Hər dəfə `.csproj` faylı və ya kod faylı dəyişdirildikdə, generator yenidən işləyəcək və faylları yeniləyəcək.
 /// </remarks>
-[Generator]
+//[Generator]
 public class CsHtmlViewGenerator : ISourceGenerator
 {
     /// <summary>
@@ -47,6 +47,7 @@ public class CsHtmlViewGenerator : ISourceGenerator
     /// <param name="context">Generatorun ilkin vəziyyətini təyin edir.</param>
     public void Initialize(GeneratorInitializationContext context)
     {
+        return;
         context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
     }
 
@@ -89,7 +90,7 @@ public class CsHtmlViewGenerator : ISourceGenerator
                     var fileName = $"{methodSymbol.ContainingType.Name}_{methodSymbol.Name}.cshtml";
 
                     // Fiziki fayl yaratmaq üçün əlavə məntiq
-                    WriteViewToDisk(viewContent, fileName, areaName, methodSymbol.ContainingType.Name);
+                    //WriteViewToDisk(viewContent, fileName, areaName, methodSymbol.ContainingType.Name);
 
 
                     // Analyzers altında görünməsi üçün əlavə edin
@@ -501,31 +502,31 @@ public class CsHtmlViewGenerator : ISourceGenerator
     #endregion
 
 
-    private void WriteViewToDisk(string viewContent, string fileName, string areaName, string controllerName)
-    {
-        // Layihə kök qovluğunu əldə edirik
-        string projectDirectory = Directory.GetCurrentDirectory();
+    //private void WriteViewToDisk(string viewContent, string fileName, string areaName, string controllerName)
+    //{
+    //    // Layihə kök qovluğunu əldə edirik
+    //    string projectDirectory = Directory.GetCurrentDirectory();
 
-        // `Views` qovluğu yolu
-        string viewsDirectory = string.IsNullOrWhiteSpace(areaName)
-            ? Path.Combine(projectDirectory, "Views", controllerName)
-            : Path.Combine(projectDirectory, "Areas", areaName, "Views", controllerName);
+    //    // `Views` qovluğu yolu
+    //    string viewsDirectory = string.IsNullOrWhiteSpace(areaName)
+    //        ? Path.Combine(projectDirectory, "Views", controllerName)
+    //        : Path.Combine(projectDirectory, "Areas", areaName, "Views", controllerName);
 
-        // Qovluğu yoxlayırıq, yoxdursa yaradılır
-        if (!Directory.Exists(viewsDirectory))
-        {
-            Directory.CreateDirectory(viewsDirectory);
-        }
+    //    // Qovluğu yoxlayırıq, yoxdursa yaradılır
+    //    if (!Directory.Exists(viewsDirectory))
+    //    {
+    //        Directory.CreateDirectory(viewsDirectory);
+    //    }
 
-        // Fayl tam yolunu yaradırıq
-        string filePath = Path.Combine(viewsDirectory, fileName);
+    //    // Fayl tam yolunu yaradırıq
+    //    string filePath = Path.Combine(viewsDirectory, fileName);
 
-        // Faylı yazırıq
-        File.WriteAllText(filePath, viewContent, Encoding.UTF8);
+    //    // Faylı yazırıq
+    //    File.WriteAllText(filePath, viewContent, Encoding.UTF8);
 
-        Console.BackgroundColor = ConsoleColor.Green;
-        Console.WriteLine($"File Path: {filePath}");
-        Console.ResetColor();
-    }
+    //    Console.BackgroundColor = ConsoleColor.Green;
+    //    Console.WriteLine($"File Path: {filePath}");
+    //    Console.ResetColor();
+    //}
 
 }

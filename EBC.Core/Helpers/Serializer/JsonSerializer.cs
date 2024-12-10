@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Xml.Serialization;
 
-namespace EBC.Core.Utilities;
+namespace EBC.Core.Helpers.Serializer;
 
 /// <summary>
 /// JSON və XML serializasiyası və deserializasiyası əməliyyatları üçün yardımçı sinif.

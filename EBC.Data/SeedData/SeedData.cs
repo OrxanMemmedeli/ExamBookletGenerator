@@ -1,13 +1,11 @@
-﻿using EBC.Core.Exceptions;
-using EBC.Core.Entities.Identity;
+﻿using EBC.Core.Constants;
+using EBC.Core.Exceptions;
+using EBC.Core.Services.Concrete;
+using EBC.Data.Entities;
+using EBC.Data.Entities.Identity;
+using EBC.Data.Repositories.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using EBC.Core.Repositories.Abstract;
-using EBC.Core.Services.Concrete;
-using EBC.Core.Constants;
-using EBC.Core.Entities;
-using EBC.Data.Repositories.Abstract;
-using EBC.Data.Entities;
 
 namespace EBC.Data.SeedData;
 

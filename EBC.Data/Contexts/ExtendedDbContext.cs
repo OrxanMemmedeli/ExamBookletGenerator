@@ -2,8 +2,10 @@
 using EBC.Core.Models.Context;
 using EBC.Data.Configurations;
 using EBC.Data.Configurations.CombineConfigs;
+using EBC.Data.Configurations.Identity;
 using EBC.Data.Entities;
 using EBC.Data.Entities.CombineEntities;
+using EBC.Data.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -40,12 +42,22 @@ public class ExtendedDbContext : BaseDbContext
     public DbSet<Text> Texts { get; set; }
     public DbSet<UserType> UserTypes { get; set; }
     public DbSet<Variant> Variants { get; set; }
+
     #endregion
+
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<OrganizationAdress> OrganizationAdresses { get; set; }
+    public DbSet<SysException> SysExceptions { get; set; }
 
 
     #region Combination Entities
     public DbSet<QuestionAttahment> QuestionAttahments { get; set; }
-    public DbSet<CompanyUser> CompanyUsers { get; set; }
+    public DbSet<CompanyUser> CompanyUsers { get; set; } 
+    public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<OrganizationAdressRole> OrganizationAdressRoles { get; set; }
+
+
+
     #endregion
 
 
@@ -91,6 +103,8 @@ public class ExtendedDbContext : BaseDbContext
 
     private static void AddConfigurations(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new OrganizationAdressRoleConfig());
+        modelBuilder.ApplyConfiguration(new UserRoleConfig());
         modelBuilder.ApplyConfiguration(new CompanyUserConfig());
         modelBuilder.ApplyConfiguration(new QuestionAttahmentConfig());
         modelBuilder.ApplyConfiguration(new AppUserConfig());

@@ -1,6 +1,6 @@
-﻿using EBC.Core.Models.Dtos.Identities.User;
-using EBC.Core.Models.ResultModel;
+﻿using EBC.Core.Models.ResultModel;
 using EBC.Core.Repositories.Abstract;
+using EBC.Data.DTOs.Identities.User;
 using EBC.Data.Entities;
 using System.Security.Claims;
 

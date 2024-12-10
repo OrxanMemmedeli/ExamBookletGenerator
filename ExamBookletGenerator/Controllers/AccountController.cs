@@ -1,9 +1,8 @@
 ﻿using EBC.Core.Attributes.Authentication;
 using EBC.Core.Helpers.Authentication;
 using EBC.Core.Models;
-using EBC.Core.Models.Dtos.Identities.User;
 using EBC.Core.Models.ResultModel;
-using EBC.Core.Repositories.Abstract;
+using EBC.Data.DTOs.Identities.User;
 using EBC.Data.Repositories.Abstract;
 using ExamBookletGenerator.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -12,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System.Net;
 using System.Security.Claims;
 
 namespace ExamBookletGenerator.Controllers;

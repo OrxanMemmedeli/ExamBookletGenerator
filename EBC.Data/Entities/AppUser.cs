@@ -1,6 +1,6 @@
 using EBC.Core.Entities.Common;
-using EBC.Core.Entities.Identity;
 using EBC.Data.Entities.CombineEntities;
+using EBC.Data.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 

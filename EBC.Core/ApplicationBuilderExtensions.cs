@@ -1,11 +1,8 @@
 ﻿using AspNetCoreRateLimit;
-using EBC.Core.Helpers.StartupFinders;
-using EBC.Core.Middlewares;
 using Hangfire;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.DependencyInjection;
 using WatchDog;
 using WatchDog.src.Enums;
 
@@ -20,7 +17,6 @@ public static class ApplicationBuilderExtensions
     /// <returns>Əlavə edilmiş middleware və xidmətlər ilə IApplicationBuilder.</returns>
     public static async Task<IApplicationBuilder> UseCoreLayerCustomApplication(this IApplicationBuilder app)
     {
-        app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
         // MiniProfiler Middleware aktiv edilməsi
         app.UseMiniProfiler();
@@ -37,8 +33,6 @@ public static class ApplicationBuilderExtensions
         //RateLimit
         UseRateLimit(app);
 
-        //OrganizationAddressFinder sinifini işə salır və URL-ləri bazaya əlavə edir.
-        await OrganizationAddressFinder.GenerateAsync(app);
 
         return app;
     }

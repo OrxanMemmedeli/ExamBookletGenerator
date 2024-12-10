@@ -1,9 +1,9 @@
 ﻿using EBC.Core.Constants;
 using EBC.Core.Helpers.Authentication;
-using EBC.Core.Models.Dtos.Identities.User;
 using EBC.Core.Models.ResultModel;
 using EBC.Core.Repositories.Concrete;
 using EBC.Core.Services.Concrete;
+using EBC.Data.DTOs.Identities.User;
 using EBC.Data.Entities;
 using EBC.Data.Repositories.Abstract;
 using Microsoft.EntityFrameworkCore;

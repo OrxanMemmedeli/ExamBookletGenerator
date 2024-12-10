@@ -1,7 +1,4 @@
-﻿using EBC.Core.Entities;
-using EBC.Core.Entities.Common;
-using EBC.Core.Entities.Configurations.Identity;
-using EBC.Core.Entities.Identity;
+﻿using EBC.Core.Entities.Common;
 using EBC.Core.Helpers.Authentication;
 using EBC.Core.Helpers.StartupFinders;
 using Microsoft.EntityFrameworkCore;
@@ -68,11 +65,6 @@ public abstract class BaseDbContext : DbContext
 
     // Core layihəsindəki Entity-lər burada təyin edilir
     //public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<UserRole> UserRoles { get; set; }
-    public DbSet<OrganizationAdress> OrganizationAdresses { get; set; }
-    public DbSet<OrganizationAdressRole> OrganizationAdressRoles { get; set; }
-    public DbSet<SysException> SysExceptions { get; set; }
 
 
     /// <summary>
@@ -90,8 +82,7 @@ public abstract class BaseDbContext : DbContext
     private static void AddConfigurations(ModelBuilder modelBuilder)
     {
         //modelBuilder.ApplyConfiguration(new BaseEntityConfig());
-        modelBuilder.ApplyConfiguration(new OrganizationAdressRoleConfig());
-        modelBuilder.ApplyConfiguration(new UserRoleConfig());
+
     }
 
     /// <summary>
