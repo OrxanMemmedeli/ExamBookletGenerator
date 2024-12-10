@@ -1,10 +1,15 @@
-﻿using EBC.Business;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using EBC.Business;
 using EBC.Core;
+using EBC.Core.Caching.Abstract;
 using EBC.Core.Helpers.StartupFinders;
+using EBC.Data;
 using EBC.Data.Contexts;
 using ExamBookletGenerator.Hubs;
+using ExamBookletGenerator.Middlewares;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,17 +44,25 @@ builder.Services.AddDbContext<DbContext, ExtendedDbContext>(conf =>
     });
 });
 
+// Middlewares
+builder.Services.AddScoped<GlobalErrorHandlingMiddleware>(provider =>
+{
+    var serviceProvider = provider.GetRequiredService<IServiceProvider>();
+
+    var cachingService = provider.GetRequiredService<ICachingService<IMemoryCache>>();
+
+    return new GlobalErrorHandlingMiddleware(serviceProvider, cachingService, builder.Environment.IsDevelopment());
+});
+
 
 //Layers Services
-builder.Services.AddCoreLayerServices(configuration: builder.Configuration, isDevelopment: builder.Environment.IsDevelopment());
+builder.Services.AddCoreLayerServices(configuration: builder.Configuration);
 builder.Services.AddBusinessLayerServices(configuration: builder.Configuration);
+builder.Services.AddDataLayerServices();
 
 builder.Services.AddSignalR();
 
 var app = builder.Build();
-
-//SeedData melumati set edilir. 
-await app.Services.AddSeedDataAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -66,6 +79,8 @@ app.UseStaticFiles();
 // Sorğuların marşrutlaşdırılması
 app.UseRouting();
 
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+
 // Authentication və Authorization istifadəsi
 app.UseAuthentication(); // İstifadəçinin doğrulama vəziyyətini yoxlayır (login olub-olmadığını təsdiqləyir).
 if (ServiceOptions.UseAuthenticationService)
@@ -73,6 +88,9 @@ if (ServiceOptions.UseAuthenticationService)
 
 //Layers App
 await app.UseCoreLayerCustomApplication();
+await app.UseBusinessLayerCustomApplication();
+//SeedData melumati set edilir. 
+await app.Services.AddSeedDataAsync();
 
 //Hangfire
 if (ServiceOptions.UseHangfire)
@@ -89,3 +107,4 @@ app.MapControllerRoute(
 app.MapHub<UserActivityHub>("/userActivityHub");
 
 app.Run();
+

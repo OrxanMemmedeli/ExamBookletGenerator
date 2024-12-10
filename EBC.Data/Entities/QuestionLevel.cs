@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EBC.Data.Entities;
 
-public class QuestionLevel : BaseEntity<Guid>, IAuditable
+public class QuestionLevel : AuditableEntity<Guid, EBC.Data.Entities.Identity.User>, IAuditable
 {
     public QuestionLevel()
     {

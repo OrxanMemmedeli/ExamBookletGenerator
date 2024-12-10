@@ -1,11 +1,11 @@
-using EBC.Core.Entities.Configurations.Common;
+using EBC.Data.Configurations.Base;
 using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EBC.Data.Configurations;
 
-public class ExamConfig : BaseEntityConfig<Exam, Guid>
+public class ExamConfig : AuditableEntityConfig<Guid, Exam>
 {
     public override void Configure(EntityTypeBuilder<Exam> builder)
     {

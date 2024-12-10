@@ -12,7 +12,8 @@ class SyntaxReceiver : ISyntaxReceiver
 
     public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
     {
-        Debugger.Launch(); // Debugging başlatmaq üçün
+        return;
+
         if (syntaxNode is MethodDeclarationSyntax methodDeclaration &&
             methodDeclaration.AttributeLists.Any(al => al.Attributes.Any(a => a.GetType() == typeof(AutoGenerateActionViewAttribute))))
             CandidateMethods.Add(methodDeclaration);

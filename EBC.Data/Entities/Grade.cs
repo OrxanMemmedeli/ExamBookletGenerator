@@ -2,7 +2,7 @@ using EBC.Core.Entities.Common;
 
 namespace EBC.Data.Entities;
 
-public class Grade : BaseEntity<Guid>, IAuditable
+public class Grade : AuditableEntity<Guid, EBC.Data.Entities.Identity.User>, IAuditable
 {
     public Grade()
     {

@@ -1,9 +1,8 @@
 ﻿using EBC.Core.Attributes.Authentication;
 using EBC.Core.Helpers.Authentication;
 using EBC.Core.Models;
-using EBC.Core.Models.Dtos.Identities.User;
 using EBC.Core.Models.ResultModel;
-using EBC.Core.Repositories.Abstract;
+using EBC.Data.DTOs.Identities.User;
 using EBC.Data.Repositories.Abstract;
 using ExamBookletGenerator.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -12,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System.Net;
 using System.Security.Claims;
 
 namespace ExamBookletGenerator.Controllers;
@@ -21,16 +19,16 @@ namespace ExamBookletGenerator.Controllers;
 [AllowRoleFilter]
 public class AccountController : Controller
 {
-    private readonly IAppUserRepository _appUserRepository;
+    private readonly IUserRepository _userRepository;
     private readonly GoogleReCaptureConfigModel _googleConfig;
     private readonly UserSessionManagerService _userSessionManagerService;
 
     public AccountController(
-        IAppUserRepository appUserRepository,
+        IUserRepository userRepository,
         IOptions<GoogleReCaptureConfigModel> googleConfig,
         UserSessionManagerService userSessionManagerService)
     {
-        _appUserRepository = appUserRepository;
+        _userRepository = userRepository;
         _googleConfig = googleConfig.Value;
         _userSessionManagerService = userSessionManagerService;
     }
@@ -49,7 +47,7 @@ public class AccountController : Controller
         bool isCaptchaValid = await IsReCaptchValidV3Async(login.captcha);
         if (ModelState.IsValid && isCaptchaValid)
         {
-            (Result<UserLoginResponseDTO> result, List<Claim> claims) = await _appUserRepository.GetLoginInfo(login.UserName, login.Password);
+            (Result<UserLoginResponseDTO> result, List<Claim> claims) = await _userRepository.GetLoginInfo(login.UserName, login.Password);
 
             if (result.IsSuccess && claims.Any())
             {

@@ -8,19 +8,19 @@ public class CompanyUserConfig : IEntityTypeConfiguration<CompanyUser>
 {
     public void Configure(EntityTypeBuilder<CompanyUser> builder)
     {
-        builder.HasKey(x => new { x.CompanyId, x.AppUserId });
+        builder.HasKey(x => new { x.CompanyId, x.UserId });
 
         builder.HasOne(x => x.Company)
             .WithMany(x => x.CompanyUsers)
             .HasForeignKey(x => x.CompanyId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(x => x.AppUser)
+        builder.HasOne(x => x.User)
             .WithMany(x => x.CompanyUsers)
-            .HasForeignKey(x => x.AppUserId)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
 
-        builder.HasIndex(x => new { x.CompanyId, x.AppUserId });
+        builder.HasIndex(x => new { x.CompanyId, x.UserId });
     }
 }

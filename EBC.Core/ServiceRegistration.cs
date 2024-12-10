@@ -7,10 +7,7 @@ using EBC.Core.Helpers.Authentication;
 using EBC.Core.Helpers.StartupFinders;
 using EBC.Core.Jobs.Common;
 using EBC.Core.Jobs.Models;
-using EBC.Core.Middlewares;
 using EBC.Core.Models;
-using EBC.Core.Repositories.Abstract;
-using EBC.Core.Repositories.Concrete;
 using EBC.Core.Services.Abstract;
 using EBC.Core.Services.BackgroundServices;
 using EBC.Core.Services.Concrete;
@@ -24,7 +21,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Profiling;
-using System.Reflection;
 using WatchDog;
 using WatchDog.src.Enums;
 
@@ -41,20 +37,13 @@ public static class ServiceRegistration
     /// <returns>Genişlənmiş service kolleksiyası.</returns>
     public static IServiceCollection AddCoreLayerServices(
         this IServiceCollection services, 
-        IConfiguration configuration, 
-        bool isDevelopment)
+        IConfiguration configuration)
     {
         string connectionString = ConnectionStringFinder.GetConnectionString(configuration);
 
         // Common Services
         AddCoreServiceRouteServices(services, configuration);
-
-        // Repositories
-        AddRepositoryServices(services);
-
-        // Middlewares
-        AddMiddlewares(services, isDevelopment);
-
+        
         // Health Checks
         RegisterHealthChecks(services, configuration);
 
@@ -63,9 +52,6 @@ public static class ServiceRegistration
 
         // WatchDog
         RegisterWatchDog(services, configuration);
-
-        // SeedData
-        services.AddScoped<EBC.Core.SeedData.SeedData>();
 
         // RateLimit
         RegisterRateLimit(services, configuration);
@@ -123,65 +109,7 @@ public static class ServiceRegistration
 
     }
 
-    private static void AddRepositoryServices(IServiceCollection services)
-    {
-        // Generic Repository
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddScoped(typeof(IGenericRepositoryWithoutBase<>), typeof(GenericRepository<>));
 
-        // Xüsusi repository-ləri qeyd edin (əgər varsa)
-        AddedRepoWithReflection(services);
-        #region OldVersion
-        //services.AddScoped<IUserRepository, UserRepository>();
-        //services.AddScoped<IRoleRepository, RoleRepository>();
-        //services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-        //services.AddScoped<IOrganizationAdressRepository, OrganizationAdressRepository>();
-        //services.AddScoped<IOrganizationAdressRoleRepository, OrganizationAdressRoleRepository>();
-        #endregion
-
-    }
-
-    private static void AddedRepoWithReflection(IServiceCollection services)
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-
-        var repositoryTypes = assembly.GetTypes()
-            .Where(type => type.IsClass
-                && !type.IsAbstract
-                && !type.IsNested
-                && !type.IsGenericType
-                && type.Name.EndsWith("Repository"))
-            .ToList();
-
-        var repositoryInterfaceTypes = assembly.GetTypes()
-            .Where(type => type.IsInterface
-                && !type.IsGenericType
-                && type.Name.StartsWith("I")
-                && type.Name.EndsWith("Repository"))
-            .ToList();
-
-        foreach (var repositoryType in repositoryTypes)
-        {
-            var repositoryInterfaceType = repositoryInterfaceTypes
-                .SingleOrDefault(x => x.Name.Equals($"I{repositoryType.Name}", StringComparison.OrdinalIgnoreCase));
-
-            if (repositoryInterfaceType != null)
-                services.AddScoped(repositoryInterfaceType, repositoryType);
-        }
-    }
-
-    private static void AddMiddlewares(IServiceCollection services, bool isDevelopment)
-    {
-        // Middleware qeydiyyatı
-        services.AddScoped<GlobalErrorHandlingMiddleware>(provider =>
-        {
-            var serviceProvider = provider.GetRequiredService<IServiceProvider>();
-
-            var cachingService = provider.GetRequiredService<ICachingService<IMemoryCache>>();
-
-            return new GlobalErrorHandlingMiddleware(serviceProvider, cachingService, isDevelopment);
-        });
-    }
     #endregion
 
 

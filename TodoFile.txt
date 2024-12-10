@@ -2,10 +2,10 @@
 
 * Filter Modellerin içini doldur. 
     * Controlleri hazirla ve Avto generate tetbiq et
-
-* ViewGenerator islemir
+        * ViewGenerator islemir
 
 * Migration olmur. Bax
+
 
 * Sənəd save edərkən Base64 Formatında save etmek lazımdır. Yada Byte[] kimi 
 
@@ -42,7 +42,7 @@
 * Create ve Modify User Id (CurrentUserden oxu)
     * Confiquration hissesinde Create ve ModifyUser meselesi hell edilmelidir.
         * AcademicYearConfig
-        * AppUserConfig
+        * UserConfig
         * AttachmentConfig
         * BookletConfig
         * ExamConfig
@@ -87,11 +87,12 @@
 * Referans hisseler ucun Index yaradilmalidirmi? 
 * DocumentTemplate Service ilə word sənədə məlumat yazan zaman şəkil göndərmənidə təmin et. 
 * Data Layerdeki Entiti-ler ucun Repositoryler elave edilmelidir
-    * Repolardan sonra Login methodundaki Company Id meselesine bax (AppUserRepo-dan ceksin melumati)
+    * Repolardan sonra Login methodundaki Company Id meselesine bax (UserRepo-dan ceksin melumati)
     * Payment or Debt type index yarat
     * Role ',' simvolu olmamalidir.
     * Valifdation hissesi AMS bax
 
+* User Silindiyine gore SeedDatanin yeri deyisdi. 
 
 
 

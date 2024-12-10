@@ -1,11 +1,12 @@
 using EBC.Core.Entities.Configurations.Common;
+using EBC.Data.Configurations.Base;
 using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EBC.Data.Configurations;
 
-public class QuestionParameterConfig : BaseEntityConfig<QuestionParameter, Guid>
+public class QuestionParameterConfig : AuditableEntityConfig<Guid, QuestionParameter>
 {
     public override void Configure(EntityTypeBuilder<QuestionParameter> builder)
     {

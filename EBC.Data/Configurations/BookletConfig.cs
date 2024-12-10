@@ -1,11 +1,12 @@
 using EBC.Core.Entities.Configurations.Common;
+using EBC.Data.Configurations.Base;
 using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EBC.Data.Configurations;
 
-public class BookletConfig : BaseEntityConfig<Booklet, Guid>
+public class BookletConfig : AuditableEntityConfig<Guid, Booklet>
 {
     public override void Configure(EntityTypeBuilder<Booklet> builder)
     {
