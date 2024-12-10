@@ -18,7 +18,7 @@ namespace EBC.Data.SeedData;
 public class SeedData
 {
     private readonly IOrganizationAdressRepository _organizationAdressRepository;
-    private readonly IAppUserRepository _appUserRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly IUserRoleRepository _userRoleRepository;
     private readonly IOrganizationAdressRoleRepository _organizationAdressRoleRepository;
@@ -31,7 +31,7 @@ public class SeedData
     /// </summary>
     public SeedData(
         IOrganizationAdressRepository organizationAdressRepository,
-        IAppUserRepository appUserRepository,
+        IUserRepository userRepository,
         IRoleRepository roleRepository,
         IUserRoleRepository userRoleRepository,
         IOrganizationAdressRoleRepository organizationAdressRoleRepository,
@@ -39,7 +39,7 @@ public class SeedData
         ISysExceptionRepository sysExceptionRepository)
     {
         _organizationAdressRepository = organizationAdressRepository;
-        _appUserRepository = appUserRepository;
+        _userRepository = userRepository;
         _roleRepository = roleRepository;
         _userRoleRepository = userRoleRepository;
         _organizationAdressRoleRepository = organizationAdressRoleRepository;
@@ -58,12 +58,12 @@ public class SeedData
     {
         string[] roleNames = { ApplicationCommonField.adminRoleName, ApplicationCommonField.managerRoleName };
 
-        if (!_appUserRepository.EntityAny())
+        if (!_userRepository.EntityAny())
         {
             var users = GetDefaultUsers();
             var roles = GetDefaultRoles();
 
-            _appUserRepository.AddRangeWithoutSave(users);
+            _userRepository.AddRangeWithoutSave(users);
             _roleRepository.AddRangeWithoutSave(roles);
 
             await AddUserAndOrganizationRoles(users, roles, roleNames, includeUserRoles: true);
@@ -87,7 +87,7 @@ public class SeedData
     /// Bu metod həm istifadəçilərə, həm də təşkilat ünvanlarına uyğun rolları təyin edir və əlavə edir. 
     /// Verilənlərin hamısı bir transaksiyada yerinə yetirilir və hər hansı bir xətada bütün əməliyyatlar geri çevrilir.
     /// </remarks>
-    private async Task AddUserAndOrganizationRoles(List<AppUser>? users, List<Role> roles, string[] roleNames, bool includeUserRoles)
+    private async Task AddUserAndOrganizationRoles(List<User>? users, List<Role> roles, string[] roleNames, bool includeUserRoles)
     {
         var organizations = GetOrganizationAdresses();
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -140,11 +140,11 @@ public class SeedData
     /// <remarks>
     /// Bu metod default admin və menecer istifadəçi hesablarını gətirir və hər bir hesab üçün unikal ID və şifrə təyin edir.
     /// </remarks>
-    private List<AppUser> GetDefaultUsers()
+    private List<User> GetDefaultUsers()
     {
-        return new List<AppUser>
+        return new List<User>
         {
-            new AppUser
+            new User
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -156,7 +156,7 @@ public class SeedData
                 UserName = ApplicationCommonField.adminUserName,
                 Password = EncryptionService.Encrypt(ApplicationCommonField.adminPass)
             },
-            new AppUser
+            new User
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

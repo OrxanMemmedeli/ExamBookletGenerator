@@ -2,9 +2,9 @@ using EBC.Core.Models.Commons;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EBC.Data.DTOs.AppUser;
+namespace EBC.Data.DTOs.User;
 
-public class AppUserCreateEditDTO : BaseEntityCreateDTO
+public class UserCreateEditDTO : BaseEntityCreateDTO
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EBC.Data.DTOs.AcademicYear;
-using EBC.Data.DTOs.AppUser;
 using EBC.Data.DTOs.Booklet;
 using EBC.Data.DTOs.Company;
 using EBC.Data.DTOs.Exam;
@@ -16,9 +15,11 @@ using EBC.Data.DTOs.Section;
 using EBC.Data.DTOs.Subject;
 using EBC.Data.DTOs.SubjectParameter;
 using EBC.Data.DTOs.Text;
+using EBC.Data.DTOs.User;
 using EBC.Data.DTOs.UserType;
 using EBC.Data.DTOs.Variant;
 using EBC.Data.Entities;
+using EBC.Data.Entities.Identity;
 
 namespace EBC.Data.Mappers.AutoMapper;
 
@@ -36,9 +37,9 @@ public class MapperProfile : Profile
         #endregion
 
 
-        #region AppUserProfile
-        CreateMap<AppUser, AcademicYearViewDTO>().ReverseMap();
-        CreateMap<AppUser, AppUserCreateEditDTO>().ReverseMap();
+        #region UserProfile
+        CreateMap<User, AcademicYearViewDTO>().ReverseMap();
+        CreateMap<User, UserCreateEditDTO>().ReverseMap();
         #endregion
 
 

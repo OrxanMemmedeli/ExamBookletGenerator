@@ -1,11 +1,12 @@
 using EBC.Core.Entities.Configurations.Common;
+using EBC.Data.Configurations.Base;
 using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EBC.Data.Configurations;
 
-public class SectionConfig : BaseEntityConfig<Section, Guid>
+public class SectionConfig : AuditableEntityConfig<Guid, Section>
 {
     public override void Configure(EntityTypeBuilder<Section> builder)
     {

@@ -4,16 +4,16 @@ using EBC.Core.Models.ResultModel;
 using EBC.Core.Repositories.Concrete;
 using EBC.Core.Services.Concrete;
 using EBC.Data.DTOs.Identities.User;
-using EBC.Data.Entities;
+using EBC.Data.Entities.Identity;
 using EBC.Data.Repositories.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace EBC.Data.Repositories.Concrete;
 
-public class AppUserRepository : GenericRepository<AppUser>, IAppUserRepository
+public class UserRepository : GenericRepository<User>, IUserRepository
 {
-    public AppUserRepository(DbContext context) : base(context)
+    public UserRepository(DbContext context) : base(context)
     {
     }
 
@@ -72,7 +72,7 @@ public class AppUserRepository : GenericRepository<AppUser>, IAppUserRepository
                 new Claim(CustomClaimTypes.CompanyIds, dto.CompanyIds)
             };
 
-    public Task<Result> AddUser(AppUser entity)
+    public Task<Result> AddUser(User entity)
     {
         if (base.entity.Any(x => x.UserName == entity.UserName))
             return Task.FromResult<Result>(Result.Failure(ExceptionMessage.UniqueUser));

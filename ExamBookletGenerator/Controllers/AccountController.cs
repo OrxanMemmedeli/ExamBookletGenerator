@@ -19,16 +19,16 @@ namespace ExamBookletGenerator.Controllers;
 [AllowRoleFilter]
 public class AccountController : Controller
 {
-    private readonly IAppUserRepository _appUserRepository;
+    private readonly IUserRepository _userRepository;
     private readonly GoogleReCaptureConfigModel _googleConfig;
     private readonly UserSessionManagerService _userSessionManagerService;
 
     public AccountController(
-        IAppUserRepository appUserRepository,
+        IUserRepository userRepository,
         IOptions<GoogleReCaptureConfigModel> googleConfig,
         UserSessionManagerService userSessionManagerService)
     {
-        _appUserRepository = appUserRepository;
+        _userRepository = userRepository;
         _googleConfig = googleConfig.Value;
         _userSessionManagerService = userSessionManagerService;
     }
@@ -47,7 +47,7 @@ public class AccountController : Controller
         bool isCaptchaValid = await IsReCaptchValidV3Async(login.captcha);
         if (ModelState.IsValid && isCaptchaValid)
         {
-            (Result<UserLoginResponseDTO> result, List<Claim> claims) = await _appUserRepository.GetLoginInfo(login.UserName, login.Password);
+            (Result<UserLoginResponseDTO> result, List<Claim> claims) = await _userRepository.GetLoginInfo(login.UserName, login.Password);
 
             if (result.IsSuccess && claims.Any())
             {

@@ -2,7 +2,7 @@ using EBC.Core.Entities.Common;
 
 namespace EBC.Data.Entities;
 
-public class Response : BaseEntity<Guid>, IAuditable
+public class Response : AuditableEntity<Guid, EBC.Data.Entities.Identity.User>, IAuditable
 {
     public string? Title { get; set; }
     public string? Content { get; set; }

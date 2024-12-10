@@ -1,11 +1,12 @@
 using EBC.Core.Entities.Configurations.Common;
+using EBC.Data.Configurations.Base;
 using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EBC.Data.Configurations;
 
-public class ResponseConig : BaseEntityConfig<Response, Guid>
+public class ResponseConig : AuditableEntityConfig<Guid, Response>
 {
     public override void Configure(EntityTypeBuilder<Response> builder)
     {

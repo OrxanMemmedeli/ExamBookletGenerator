@@ -1,10 +1,11 @@
 using EBC.Core.Entities.Common;
 using EBC.Data.Entities.CombineEntities;
+using EBC.Data.Entities.Identity;
 using EBC.Data.Enums;
 
 namespace EBC.Data.Entities;
 
-public class Attachment : BaseEntity<Guid>, IAuditable
+public class Attachment : AuditableEntity<Guid, User>, IAuditable
 {
     public Attachment()
     {

@@ -2,6 +2,6 @@
 
 namespace EBC.Data.FilterModels;
 
-public class AppUserFilterModel : BaseFilterModel
+public class UserFilterModel : BaseFilterModel
 {
 }
