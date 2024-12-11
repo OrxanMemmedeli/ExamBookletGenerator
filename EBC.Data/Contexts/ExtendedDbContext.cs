@@ -1,7 +1,9 @@
 ﻿using EBC.Core.Entities.Common;
+using EBC.Core.Entities.Configurations.Common;
 using EBC.Core.Helpers.Authentication;
 using EBC.Core.Helpers.StartupFinders;
 using EBC.Data.Configurations;
+using EBC.Data.Configurations.Base;
 using EBC.Data.Configurations.CombineConfigs;
 using EBC.Data.Configurations.Identity;
 using EBC.Data.Entities;
@@ -9,6 +11,7 @@ using EBC.Data.Entities.CombineEntities;
 using EBC.Data.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace EBC.Data.Contexts;
 /// <summary>
@@ -85,7 +88,7 @@ public class ExtendedDbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             // Application layihəsinin kök qovluğunu tapmaq
-            var basePath = AppContext.BaseDirectory;
+            var basePath = Path.Combine(AppContext.BaseDirectory);
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
@@ -102,15 +105,17 @@ public class ExtendedDbContext : DbContext
 
             string connectionString = ConnectionStringFinder.GetConnectionString(configuration);
 
-            optionsBuilder.UseSqlServer(connectionString, option =>
-            {
-                option.EnableRetryOnFailure(
-                            maxRetryCount: 5,
-                            maxRetryDelay: TimeSpan.FromSeconds(30),
-                            errorNumbersToAdd: null); // connection zamani xeta alinarsa
+            optionsBuilder.UseSqlServer(connectionString);
 
-                option.CommandTimeout(60); // Sorğunun maksimum icra müddətini 60 saniyə olaraq təyin edir
-            });
+            //optionsBuilder.UseSqlServer(connectionString, option =>
+            //{
+            //    option.EnableRetryOnFailure(
+            //                maxRetryCount: 5,
+            //                maxRetryDelay: TimeSpan.FromSeconds(30),
+            //                errorNumbersToAdd: null); // connection zamani xeta alinarsa
+
+            //    option.CommandTimeout(60); // Sorğunun maksimum icra müddətini 60 saniyə olaraq təyin edir
+            //});
         }
     }
 
@@ -124,56 +129,13 @@ public class ExtendedDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         AddConfigurations(modelBuilder);
-
-        //var auditableEntities = typeof(BaseEntity<>).Assembly.GetTypes()
-        //    .Where(t => typeof(IAuditable).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
-
-        //foreach (var entityType in auditableEntities)
-        //{
-        //    modelBuilder.Entity(entityType)
-        //        .Property(typeof(Guid?), "CreatedUserId")
-        //        .IsRequired(false);
-
-        //    modelBuilder.Entity(entityType)
-        //        .Property(typeof(Guid?), "ModifiedUserId")
-        //        .IsRequired(false);
-
-        //    modelBuilder.Entity(entityType)
-        //        .HasOne(typeof(User), "CreatedUser")
-        //        .WithMany()
-        //        .HasForeignKey("CreatedUserId")
-        //        .OnDelete(DeleteBehavior.Restrict)
-        //        .IsRequired(false);
-
-        //    modelBuilder.Entity(entityType)
-        //        .HasOne(typeof(User), "ModifiedUser")
-        //        .WithMany()
-        //        .HasForeignKey("ModifiedUserId")
-        //        .OnDelete(DeleteBehavior.Restrict)
-        //        .IsRequired(false);
-        //}
     }
 
     private static void AddConfigurations(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new OrganizationAdressRoleConfig());
-        modelBuilder.ApplyConfiguration(new UserRoleConfig());
-        modelBuilder.ApplyConfiguration(new CompanyUserConfig());
-        modelBuilder.ApplyConfiguration(new QuestionAttahmentConfig());
-        modelBuilder.ApplyConfiguration(new UserConfig());
-        modelBuilder.ApplyConfiguration(new AuthenticationHistoryConfig());
-        modelBuilder.ApplyConfiguration(new BookletConfig());
-        modelBuilder.ApplyConfiguration(new CompanyConfig());
-        modelBuilder.ApplyConfiguration(new ExamConfig());
-        modelBuilder.ApplyConfiguration(new PaymentOrDebtConfig());
-        modelBuilder.ApplyConfiguration(new PaymentSummaryConfig());
-        modelBuilder.ApplyConfiguration(new QuestionConfig());
-        modelBuilder.ApplyConfiguration(new QuestionParameterConfig());
-        modelBuilder.ApplyConfiguration(new ResponseConig());
-        modelBuilder.ApplyConfiguration(new SectionConfig());
-        modelBuilder.ApplyConfiguration(new SendingEmailConfig());
-        modelBuilder.ApplyConfiguration(new SubjectParameterConfig());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
+
 
     /// <summary>
     /// Verilənlər bazasına dəyişiklikləri saxlamaq üçün metodu ləğv edir və əvvəlcə `OnBeforeSave` metodunu çağırır.

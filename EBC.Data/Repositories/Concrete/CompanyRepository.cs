@@ -20,19 +20,16 @@ public class CompanyRepository : GenericRepository<Company>, ICompanyRepository
     private readonly IUrlService _urlService;
     private readonly ISendingEmailRepository _sendingEmailRepository;
     private readonly IPaymentSummaryRepository _paymentSummaryRepository;
-    private readonly ICompanyRepository _companyRepository;
 
     public CompanyRepository(
         DbContext context,
         IUrlService urlService,
         ISendingEmailRepository sendingEmailRepository,
-        IPaymentSummaryRepository paymentSummaryRepository,
-        ICompanyRepository companyRepository) : base(context)
+        IPaymentSummaryRepository paymentSummaryRepository) : base(context)
     {
         _urlService = urlService;
         _sendingEmailRepository = sendingEmailRepository;
         _paymentSummaryRepository = paymentSummaryRepository;
-        _companyRepository = companyRepository;
     }
 
     public async Task<Result> EditCompanyWithoutPayment(CompanyEditDTO company)
@@ -258,7 +255,7 @@ public class CompanyRepository : GenericRepository<Company>, ICompanyRepository
         company.IsPenal = false;
         company.IsActive = true;
 
-        _companyRepository.AddWithoutSave(company);
+        base.AddWithoutSave(company);
     }
 
     private void SetConfirmAndWelcomeEmails(Company company)

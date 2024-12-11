@@ -3,7 +3,7 @@ using EBC.Core.Models.Enums;
 
 namespace EBC.Data.Entities;
 
-public class PaymentOrDebt‎: BaseEntity<Guid>
+public class PaymentOrDebt: BaseEntity<Guid>
 {
     public decimal Amount { get; set; }
     public PaymentType PaymentType { get; set; }

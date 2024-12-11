@@ -25,5 +25,14 @@ public class ExamConfig : AuditableEntityConfig<Guid, Exam>
         builder.HasIndex(x => x.ExamParameterId);
 
 
+        builder.HasOne(x => x.CreateUser)
+            .WithMany(x => x.Exams)
+            .HasForeignKey(x => x.CreateUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.ModifyUser)
+            .WithMany(x => x.ExamsM)
+            .HasForeignKey(x => x.ModifyUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

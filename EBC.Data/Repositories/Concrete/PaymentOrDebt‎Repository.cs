@@ -11,21 +11,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EBC.Data.Repositories.Concrete;
 
-public class PaymentOrDebt‎Repository : GenericRepository<PaymentOrDebt>, IPaymentOrDebtRepository
+public class PaymentOrDebtRepository : GenericRepository<PaymentOrDebt>, IPaymentOrDebtRepository
 {
     private readonly ISendingEmailRepository _sendingEmailRepository;
-    public PaymentOrDebtRepository(DbContext context, ISendingEmailRepository sendingEmailRepository) : base(context)
+    private readonly ICompanyRepository _companyRepository;
+    public PaymentOrDebtRepository(
+        DbContext context,
+        ISendingEmailRepository sendingEmailRepository,
+        ICompanyRepository companyRepository) : base(context)
     {
         _sendingEmailRepository = sendingEmailRepository;
+        _companyRepository = companyRepository;
     }
 
-    public async Task<Result> AddPaymentAsnyc(PaymentOrDebt paymentOrDebt, ICompanyRepository _companyRepository)
+    public async Task<Result> AddPaymentAsnyc(PaymentOrDebt paymentOrDebt)
     {
         var company = await _companyRepository.GetByIdAsync(paymentOrDebt.CompanyId, false, x => x.PaymentSummary);
 
         var message = string.Empty;
 
-        SetPayment(paymentOrDebt, _companyRepository, company, out message);
+        SetPayment(paymentOrDebt, company, out message);
         SetEmail(paymentOrDebt, company);
 
         return await SaveChangesAsync() > 0
@@ -49,7 +54,7 @@ public class PaymentOrDebt‎Repository : GenericRepository<PaymentOrDebt>, IPay
         });
     }
 
-    private void SetPayment(PaymentOrDebt paymentOrDebt, ICompanyRepository _companyRepository, Company company, out string message)
+    private void SetPayment(PaymentOrDebt paymentOrDebt, Company company, out string message)
     {
         if (!company.IsActive && company.PaymentSummary.CurrentDebt <= paymentOrDebt.Amount)
         {
@@ -67,4 +72,5 @@ public class PaymentOrDebt‎Repository : GenericRepository<PaymentOrDebt>, IPay
             message = $"Borc tam ödənilmədiyi üçün sistemə giriş aktiv edilmədi. Sistemin açılması üçün əlavə olaraq {company.PaymentSummary.CurrentDebt - paymentOrDebt.Amount} ₼ ödəniş edilməlidir.";
         }
     }
+
 }

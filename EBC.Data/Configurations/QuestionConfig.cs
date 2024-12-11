@@ -55,5 +55,15 @@ public class QuestionConfig : AuditableEntityConfig<Guid, Question>
         builder.HasIndex(x => x.TextId);
         builder.HasIndex(x => x.AcademicYearId);
 
+
+        builder.HasOne(x => x.CreateUser)
+            .WithMany(x => x.Questions)
+            .HasForeignKey(x => x.CreateUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.ModifyUser)
+            .WithMany(x => x.QuestionsM)
+            .HasForeignKey(x => x.ModifyUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

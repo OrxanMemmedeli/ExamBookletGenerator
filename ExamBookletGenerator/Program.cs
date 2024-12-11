@@ -44,6 +44,9 @@ builder.Services.AddDbContext<DbContext, ExtendedDbContext>(conf =>
     });
 });
 
+// ExtendedDbContextFactory-nı əlavə et
+builder.Services.AddScoped<ExtendedDbContextFactory>();
+
 // Middlewares
 builder.Services.AddScoped<GlobalErrorHandlingMiddleware>(provider =>
 {

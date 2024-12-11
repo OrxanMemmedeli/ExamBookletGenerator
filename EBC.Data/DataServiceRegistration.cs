@@ -1,5 +1,7 @@
 ﻿using EBC.Core.Repositories.Abstract;
 using EBC.Core.Repositories.Concrete;
+using EBC.Data.Repositories.Abstract;
+using EBC.Data.Repositories.Concrete;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -29,43 +31,35 @@ public static class DataServiceRegistration
         services.AddScoped(typeof(IGenericRepositoryWithoutBase<>), typeof(GenericRepository<>));
 
         // Xüsusi repository-ləri qeyd edin (əgər varsa)
-        AddedRepoWithReflection(services);
-        #region OldVersion
-        //services.AddScoped<IUserRepository, UserRepository>();
-        //services.AddScoped<IRoleRepository, RoleRepository>();
-        //services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-        //services.AddScoped<IOrganizationAdressRepository, OrganizationAdressRepository>();
-        //services.AddScoped<IOrganizationAdressRoleRepository, OrganizationAdressRoleRepository>();
-        #endregion
+        services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
+        services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+        services.AddScoped<IAuthenticationHistoryRepository, AuthenticationHistoryRepository>();
+        services.AddScoped<IBookletRepository, BookletRepository>();
+        services.AddScoped<IExamParameterRepository, ExamParameterRepository>();
+        services.AddScoped<IExamRepository, ExamRepository>();
+        services.AddScoped<IGradeRepository, GradeRepository>();
+        services.AddScoped<IGroupRepository, GroupRepository>();
+        services.AddScoped<IOrganizationAdressRepository, OrganizationAdressRepository>();
+        services.AddScoped<IOrganizationAdressRoleRepository, OrganizationAdressRoleRepository>();
+        services.AddScoped<IPaymentOrDebtRepository, PaymentOrDebtRepository>();
+        services.AddScoped<IPaymentSummaryRepository, PaymentSummaryRepository>();
+        services.AddScoped<IQuestionLevelRepository, QuestionLevelRepository>();
+        services.AddScoped<IQuestionParameterRepository, QuestionParameterRepository>();
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
+        services.AddScoped<IQuestionTypeRepository, QuestionTypeRepository>();
+        services.AddScoped<IResponseRepository, ResponseRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<ISectionRepository, SectionRepository>();
+        services.AddScoped<ISendingEmailRepository, SendingEmailRepository>();
+        services.AddScoped<ISubjectParameterRepository, SubjectParameterRepository>();
+        services.AddScoped<ISubjectRepository, SubjectRepository>();
+        services.AddScoped<ISysExceptionRepository, SysExceptionRepository>();
+        services.AddScoped<ITextRepository, TextRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        services.AddScoped<IUserTypeRepository, UserTypeRepository>();
+        services.AddScoped<IVariantRepository, VariantRepository>();
+        services.AddScoped<ICompanyRepository, CompanyRepository>();
 
-    }
-
-    private static void AddedRepoWithReflection(IServiceCollection services)
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-
-        var repositoryTypes = assembly.GetTypes()
-            .Where(type => type.IsClass
-                && !type.IsAbstract
-                && !type.IsNested
-                && !type.IsGenericType
-                && type.Name.EndsWith("Repository"))
-            .ToList();
-
-        var repositoryInterfaceTypes = assembly.GetTypes()
-            .Where(type => type.IsInterface
-                && !type.IsGenericType
-                && type.Name.StartsWith("I")
-                && type.Name.EndsWith("Repository"))
-            .ToList();
-
-        foreach (var repositoryType in repositoryTypes)
-        {
-            var repositoryInterfaceType = repositoryInterfaceTypes
-                .SingleOrDefault(x => x.Name.Equals($"I{repositoryType.Name}", StringComparison.OrdinalIgnoreCase));
-
-            if (repositoryInterfaceType != null)
-                services.AddScoped(repositoryInterfaceType, repositoryType);
-        }
     }
 }

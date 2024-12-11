@@ -37,5 +37,14 @@ public class ResponseConig : AuditableEntityConfig<Guid, Response>
         builder.HasIndex(x => x.QuestionTypeId);
         builder.HasIndex(x => x.AcademicYearId);
 
+        builder.HasOne(x => x.CreateUser)
+            .WithMany(x => x.Responses)
+            .HasForeignKey(x => x.CreateUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.ModifyUser)
+            .WithMany(x => x.ResponsesM)
+            .HasForeignKey(x => x.ModifyUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

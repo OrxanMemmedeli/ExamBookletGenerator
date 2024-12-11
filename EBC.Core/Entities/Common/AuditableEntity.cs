@@ -9,6 +9,6 @@ public abstract class AuditableEntity<TId, TEntity> : BaseEntity<TId>
     [ForeignKey("ModifyUserId")]
     public TId? ModifyUserId { get; set; }
 
-    public virtual TEntity? CreateUser { get; set; }
-    public virtual TEntity? ModifyUser { get; set; }
+    public virtual TEntity CreateUser { get; set; }
+    public virtual TEntity ModifyUser { get; set; }
 }

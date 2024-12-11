@@ -85,7 +85,6 @@ public class UserRepository : GenericRepository<User>, IUserRepository
         return Task.FromResult<Result>(Result.Success());
     }
 
-
     public Task<Result> UpdateUser(Guid userId, UserEditDTO dto)
     {
         var user = base.entity.FirstOrDefault(x => x.Id == userId);

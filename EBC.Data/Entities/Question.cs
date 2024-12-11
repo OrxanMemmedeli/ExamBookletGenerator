@@ -1,9 +1,10 @@
 using EBC.Core.Entities.Common;
 using EBC.Data.Entities.CombineEntities;
+using EBC.Data.Entities.Identity;
 
 namespace EBC.Data.Entities;
 
-public class Question : AuditableEntity<Guid, EBC.Data.Entities.Identity.User>, IAuditable
+public class Question : AuditableEntity<Guid, User>, IAuditable
 {
     public Question()
     {

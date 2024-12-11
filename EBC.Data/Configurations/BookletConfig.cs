@@ -44,5 +44,15 @@ public class BookletConfig : AuditableEntityConfig<Guid, Booklet>
         builder.HasIndex(x => x.AcademicYearId);
 
 
+        builder.HasOne(x => x.CreateUser)
+            .WithMany(x => x.Booklets)
+            .HasForeignKey(x => x.CreateUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.ModifyUser)
+            .WithMany(x => x.BookletsM)
+            .HasForeignKey(x => x.ModifyUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

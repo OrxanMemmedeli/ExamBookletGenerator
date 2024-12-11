@@ -1,4 +1,3 @@
-using EBC.Core.Entities.Configurations.Common;
 using EBC.Data.Configurations.Base;
 using EBC.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +24,14 @@ public class QuestionParameterConfig : AuditableEntityConfig<Guid, QuestionParam
         builder.HasIndex(x => x.QuestionTypeId);
         builder.HasIndex(x => x.SubjectParameterId);
 
+        builder.HasOne(x => x.CreateUser)
+            .WithMany(x => x.QuestionParameters)
+            .HasForeignKey(x => x.CreateUserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(x => x.ModifyUser)
+            .WithMany(x => x.QuestionParametersM)
+            .HasForeignKey(x => x.ModifyUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
